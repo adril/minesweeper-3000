@@ -2,12 +2,14 @@ minesweeper-3000
 ================
 
 What is it ?
------------
+
 
 An android fork on an iOS minesweeper https://itunes.apple.com/app/minesweeper-3000/id617704965?ign-mpt=uo=5
 
-What functionalites have to do done:
 -----------------------------------
+
+What functionalites have to do done:
+
 
 - Easy to control (Drag) 
 - Highscore/Statistics data 
@@ -18,8 +20,10 @@ What functionalites have to do done:
 - Build in minesweeper help & Video tutorial
 - All resolution supported
 
-How to control Minesweeper ?
 -----------------------------------
+
+How to control Minesweeper ?
+
 
 - Tap a square to clear it.
 - Tap and hold at least 2 seconds to flagging.
