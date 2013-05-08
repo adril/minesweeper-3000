@@ -2,6 +2,7 @@ package android.games.minesweeper;
 
 import java.util.ArrayList;
 
+import java.util.List;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -23,6 +24,8 @@ public class MainActivity extends Activity {
 	private int[] image = { R.drawable.play_icon, R.drawable.heart_icon, R.drawable.cup_icon, R.drawable.skull_icon };
 
 	private ListItemMainMenuDetails item_details;
+	private ScoreDataSource scoreDataSource;
+	private OptionDataSource optionDataSource;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,28 @@ public class MainActivity extends Activity {
 			}                 
 		});
 
+		// SCORE DB
+	    scoreDataSource = new ScoreDataSource(this);
+	    scoreDataSource.open();
+		scoreDataSource.createScore(12000, "test", 12, 1, 33);
+		List<Score> scores = scoreDataSource.getAllScores();
+		for (int i = 0; i < scores.size(); i++)
+		{
+			Log.d("Scores", scores.get(i).toString());
+		}
+		scoreDataSource.close();
+		
+		// OPTIONS DB
+	    optionDataSource = new OptionDataSource(this);
+	    optionDataSource.open();
+	    optionDataSource.createOption("Easy", 12, 1);
+		List<Option> options = optionDataSource.getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+		{
+			Log.d("Options", options.get(i).toString());
+		}
+		optionDataSource.close();
+        
 	}
 
 	private ArrayList<ListItemMainMenuDetails> getMainMenuDetailsList() {
