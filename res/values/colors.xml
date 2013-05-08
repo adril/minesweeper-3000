@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#FF0000</color>
+
+    <color name="red">#FF0000</color>
+    <color name="background">#E3E3E3</color>
+    <color name="navigation_bar_background">#A32331</color>
+    <color name="navigation_bar_text">#FFFFFF</color>
+    <color name="item_main_menu_background">#FFFFFF</color>
+    <color name="item_main_menu_selected_background">#A32331</color>
+    
+    <color name="button_normal">#A32331</color>
+    <color name="button_pressed">#A32331</color>
+    
+    <color name="item_main_label">#555555</color>
     <color name="game_board">#CCCCCC</color>
+    
 </resources>
