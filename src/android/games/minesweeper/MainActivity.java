@@ -1,20 +1,47 @@
 package android.games.minesweeper;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public class MainActivity extends Activity implements OnClickListener {
+	private ScoreDataSource scoreDataSource;
+	private OptionDataSource optionDataSource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// SCORE DB
+	    scoreDataSource = new ScoreDataSource(this);
+	    scoreDataSource.open();
+		scoreDataSource.createScore(12000, "test", 12, 1, 33);
+		List<Score> scores = scoreDataSource.getAllScores();
+		for (int i = 0; i < scores.size(); i++)
+		{
+			Log.d("Scores", scores.get(i).toString());
+		}
+		scoreDataSource.close();
+		
+		// OPTIONS DB
+	    optionDataSource = new OptionDataSource(this);
+	    optionDataSource.open();
+	    optionDataSource.createOption("Easy", 12, 1);
+		List<Option> options = optionDataSource.getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+		{
+			Log.d("Options", options.get(i).toString());
+		}
+		optionDataSource.close();
         
         View newGameButton = findViewById(R.id.new_game_button);
         newGameButton.setOnClickListener(this);
