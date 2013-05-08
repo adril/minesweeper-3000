@@ -34,7 +34,7 @@ public class GameActivity extends Activity {
 	int totalCols;
 	int totalMines;
 	private Tile[][] tiles;
-	private TableLayout mineField;
+//	private TableLayout mineField;
 	private int secondsPassed;
 	private boolean timerStarted;
 	private boolean minesSet;
@@ -45,12 +45,12 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		
-		mineField = (TableLayout) findViewById(R.id.MineField);
+//		mineField = (TableLayout) findViewById(R.id.MineField);
 		timer = findViewById(R.id.Timer);
 		
-        int diff = getIntent().getIntExtra(KEY_DIFFICULTY, DIFFICULTY_EASY);
-		createGameBoard(diff);
-		showGameBoard();
+//        int diff = getIntent().getIntExtra(KEY_DIFFICULTY, DIFFICULTY_EASY);
+//		createGameBoard(diff);
+//		showGameBoard();
 	}
 	
 	public void showGameBoard()
@@ -74,7 +74,7 @@ public class GameActivity extends Activity {
 	        tableRow.addView(tiles[row][col]);
 	      }
 	      //add the row to the minefield layout
-	      mineField.addView(tableRow,new TableLayout.LayoutParams((tileWH * tilePadding) * totalCols, tileWH * tilePadding)); 
+//	      mineField.addView(tableRow,new TableLayout.LayoutParams((tileWH * tilePadding) * totalCols, tileWH * tilePadding)); 
 	    }
 	  }
 	
@@ -199,7 +199,7 @@ public class GameActivity extends Activity {
 	    //imageButton.setBackgroundResource(R.drawable.smile);
 	    
 	    // remove the table rows from the minefield table layout
-	    mineField.removeAllViews();
+//	    mineField.removeAllViews();
 	    
 	    // reset variables
 	    timerStarted = false;

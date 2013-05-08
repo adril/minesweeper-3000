@@ -34,7 +34,7 @@
       android:text="Mine count" />
     </TableRow>
     
-    <TableRow>
+<!--     <TableRow>
     <TableLayout
         android:id="@+id/MineField"
         android:layout_width="match_parent"
@@ -45,5 +45,5 @@
         android:background="#ccc"
         android:padding="5dip" >
     </TableLayout>
-    </TableRow>
+    </TableRow> -->
 </TableLayout>
