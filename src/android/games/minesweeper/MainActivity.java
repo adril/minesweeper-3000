@@ -21,9 +21,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		((Globals)getApplication()).initialize();
+
 		// SCORE DB
-	    scoreDataSource = new ScoreDataSource(this);
-	    scoreDataSource.open();
+	    scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
 		scoreDataSource.createScore(12000, "test", 12, 1, 33);
 		List<Score> scores = scoreDataSource.getAllScores();
 		for (int i = 0; i < scores.size(); i++)
@@ -33,12 +34,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		scoreDataSource.close();
 		
 		// OPTIONS DB
-	    optionDataSource = new OptionDataSource(this);
-	    optionDataSource.open();
-	    optionDataSource.createOption("Easy", 12, 1);
+	    optionDataSource = ((Globals)getApplication()).getOptionDataSource();
+	    optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
+	    optionDataSource.deleteAllOptions();
+	    optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
+	    Option optTmp = optionDataSource.getOption();
+	    optionDataSource.deleteOption(optTmp);
+	    optionDataSource.createOption("Easy", game_size.GAME_SIZE_MEDIUM.ordinal(), level.LEVEL_MEDIUM.ordinal());
 		List<Option> options = optionDataSource.getAllOptions();
 		for (int i = 0; i < options.size(); i++)
 		{
+			options.get(i).setName(options.get(i).getName() + " modified");
 			Log.d("Options", options.get(i).toString());
 		}
 		optionDataSource.close();
@@ -68,8 +74,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-
 	      switch(v.getId())
 	      {
 	      	case R.id.high_scores_button:
