@@ -31,7 +31,32 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		((Globals)getApplication()).initialize();
+		// SCORE DB
+	  scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
+		scoreDataSource.createScore(12000, "test", 12, 1, 33);
+		List<Score> scores = scoreDataSource.getAllScores();
+		for (int i = 0; i < scores.size(); i++)
+		{
+			Log.d("Scores", scores.get(i).toString());
+		}
 		
+		// OPTIONS DB
+    optionDataSource = ((Globals)getApplication()).getOptionDataSource();
+    optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
+    optionDataSource.deleteAllOptions();
+    optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
+    Option optTmp = optionDataSource.getOption();
+    optionDataSource.deleteOption(optTmp);
+    optionDataSource.createOption("Easy", game_size.GAME_SIZE_MEDIUM.ordinal(), level.LEVEL_MEDIUM.ordinal());
+		List<Option> options = optionDataSource.getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+		{
+			options.get(i).setName(options.get(i).getName() + " modified");
+			Log.d("Options", options.get(i).toString());
+		}
+
 //		ActionBar actionBar = getActionBar();	   
 //		actionBar.setDisplayUseLogoEnabled(false);
 		
@@ -70,29 +95,6 @@ public class MainActivity extends Activity {
 				}
 			}                 
 		});
-
-		// SCORE DB
-	    scoreDataSource = new ScoreDataSource(this);
-	    scoreDataSource.open();
-		scoreDataSource.createScore(12000, "test", 12, 1, 33);
-		List<Score> scores = scoreDataSource.getAllScores();
-		for (int i = 0; i < scores.size(); i++)
-		{
-			Log.d("Scores", scores.get(i).toString());
-		}
-		scoreDataSource.close();
-		
-		// OPTIONS DB
-	    optionDataSource = new OptionDataSource(this);
-	    optionDataSource.open();
-	    optionDataSource.createOption("Easy", 12, 1);
-		List<Option> options = optionDataSource.getAllOptions();
-		for (int i = 0; i < options.size(); i++)
-		{
-			Log.d("Options", options.get(i).toString());
-		}
-		optionDataSource.close();
-        
 	}
 
 	private ArrayList<ListItemMainMenuDetails> getMainMenuDetailsList() {
@@ -115,5 +117,4 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
 }
