@@ -79,6 +79,7 @@ public class OptionsActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO remove all record from the DATA BASE
+				((Globals)getApplication()).getScoreDataSource().deleteAllScores();
 				Log.d("Button Remove : ", "ok");
 			}
 		});
