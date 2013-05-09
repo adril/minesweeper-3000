@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:background="@drawable/item_main_menu_selector" >
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dip" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="84dip"
+            android:layout_height="84dip"
+            android:layout_marginTop="3dp"
+            android:padding="10dip"
+            android:src="@drawable/icon_bad" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="11% Completed with size 1"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/item_main_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+             <TextView
+                 android:id="@+id/textView2"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginRight="0dp"
+                 android:gravity="left"
+                 android:text="Astero finished the game with difficulty 1 in 30 seconds."
+                 android:textAppearance="?android:attr/textAppearanceLarge"
+                 android:textColor="@color/item_main_label"
+                 android:textSize="14sp"
+                 android:textStyle="normal" />
+
+        </LinearLayout>
+
+       
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -40,19 +40,24 @@ public final class R {
         public static final int cup_icon=0x7f020000;
         public static final int heart_icon=0x7f020001;
         public static final int ic_launcher=0x7f020002;
-        public static final int item_main_menu_selector=0x7f020003;
-        public static final int play_icon=0x7f020004;
-        public static final int skull_icon=0x7f020005;
-        public static final int tile=0x7f020006;
+        public static final int icon_bad=0x7f020003;
+        public static final int icon_good=0x7f020004;
+        public static final int icon_normal=0x7f020005;
+        public static final int item_main_menu_selector=0x7f020006;
+        public static final int play_icon=0x7f020007;
+        public static final int skull_icon=0x7f020008;
+        public static final int tile=0x7f020009;
     }
     public static final class id {
         public static final int HighScoresTitle=0x7f0a0002;
         public static final int Timer=0x7f0a0000;
-        public static final int action_settings=0x7f0a0006;
-        public static final int imageView1=0x7f0a0004;
-        public static final int ll=0x7f0a0003;
+        public static final int action_settings=0x7f0a0008;
+        public static final int imageView1=0x7f0a0005;
+        public static final int ll=0x7f0a0004;
         public static final int main_list_view=0x7f0a0001;
-        public static final int textView1=0x7f0a0005;
+        public static final int score_list_view=0x7f0a0003;
+        public static final int textView1=0x7f0a0006;
+        public static final int textView2=0x7f0a0007;
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;
@@ -61,6 +66,7 @@ public final class R {
         public static final int activity_options=0x7f030003;
         public static final int activity_score_record=0x7f030004;
         public static final int item_main_menu=0x7f030005;
+        public static final int item_score_record=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f090000;

@@ -12,4 +12,10 @@
       android:textColor="#000"
       android:textSize="35sp"
       android:text="@string/scores_records" />
+    
+    
+    <ListView
+        android:id="@+id/score_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
