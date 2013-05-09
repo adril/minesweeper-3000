@@ -15,33 +15,39 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ScoreRecordsActivity extends BaseActivity implements OnClickListener {
-	
+
 	class ScoreRecordsText { public String text1, text2; }
-	
+
 	private String TAG = "ScoreActivity";
-	
+
 	private ArrayList<ScoreRecordsText> text = new ArrayList<ScoreRecordsText>();
 
 	private int[] image = { R.drawable.icon_good, R.drawable.icon_normal, R.drawable.icon_bad };
-	
+
 	private ScoreDataSource dataSource;
 	private List<Score> Scores = new ArrayList<Score>();
 	private ListItemScoreRecords item_details;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setContentView(R.layout.activity_score_record);
+		super.onCreate(savedInstanceState);
+		
 		dataSource = new ScoreDataSource(this);
 		dataSource.open();
 		Scores = dataSource.getAllScores();
 		text = getScoreRecordsText();
-		super.onCreate(savedInstanceState);
+
 		final ListView listView = (ListView)findViewById(R.id.score_list_view);
 		ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList();
-		if (listItemArray.isEmpty() == false)
-			listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
-	
+		//if (listItemArray.isEmpty() == false)
+		
+		
+		
+		listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
-		    
+
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -55,17 +61,16 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		});
-		setContentView(R.layout.activity_score_record);
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	private ArrayList<ListItemScoreRecords> getScoreRecordsList() {
-		
+
 		ArrayList<ListItemScoreRecords> results = new ArrayList<ListItemScoreRecords>();
 
 		for (int i = 0; i < Scores.size(); i++) {
@@ -83,9 +88,9 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 
 		return results;
 	}
-	
-private ArrayList<ScoreRecordsText> getScoreRecordsText() {
-		
+
+	private ArrayList<ScoreRecordsText> getScoreRecordsText() {
+
 		ArrayList<ScoreRecordsText> results = new ArrayList<ScoreRecordsText>();
 		ScoreRecordsText score_records_text = new ScoreRecordsText();
 		for (int i = 0; i < Scores.size(); i++) {

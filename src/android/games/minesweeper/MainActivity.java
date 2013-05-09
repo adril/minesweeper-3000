@@ -1,21 +1,12 @@
 package android.games.minesweeper;
 
 import java.util.ArrayList;
-
-import java.util.List;
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.games.minesweeper.R;
-import android.games.minesweeper.R.drawable;
-import android.games.minesweeper.R.id;
-import android.games.minesweeper.R.layout;
-import android.games.minesweeper.R.menu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -31,16 +22,17 @@ public class MainActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		this.initializeDatabase();
 
-		//INFO: init List View with Static Data
+		this.initializeLayout();
+		this.initializeDatabase();
+	}
+
+	private void initializeLayout() {
 		ArrayList<ListItemMainMenu> listItemArray = getMainMenuDetailsList();
 		final ListView listView = (ListView)findViewById(R.id.main_list_view);
 		listView.setAdapter(new MainMenuListAdapter(listItemArray, getApplicationContext()));
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -63,7 +55,6 @@ public class MainActivity extends BaseActivity {
 					Intent ih = new Intent(MainActivity.this, HelpActivity.class);
 					startActivity(ih);
 					break;
-
 				default:
 					break;
 				}
@@ -75,12 +66,12 @@ public class MainActivity extends BaseActivity {
 		// Instantiates ScoreDataSource and OptionDataSource in the Globals variable
 		// The Globals variable declares variables that can be accessed anywhere in the code.
 		// Access with: (Globals)getApplication()
-		((Globals)getApplication()).initializeDatabase();
-		((Globals)getApplication()).seedDatabase();
+		globals = (Globals)getApplication();
+		globals.initializeDatabase();
+		globals.seedDatabase();
 	}
 
 	private ArrayList<ListItemMainMenu> getMainMenuDetailsList() {
-		
 		ArrayList<ListItemMainMenu> results = new ArrayList<ListItemMainMenu>();
 
 		for (int i = 0; i < text.length; i++) {
@@ -102,7 +93,7 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		((Globals)getApplication()).closeDatabase();
+		globals.closeDatabase();
 		super.onDestroy();
 	}
 }
