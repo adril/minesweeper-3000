@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ScoreRecordsActivity extends Activity implements OnClickListener {
+public class ScoreRecordsActivity extends BaseActivity implements OnClickListener {
 	
 	class ScoreRecordsText { public String text1, text2; }
 	

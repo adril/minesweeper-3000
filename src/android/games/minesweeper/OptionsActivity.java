@@ -16,7 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class OptionsActivity extends Activity {
+public class OptionsActivity extends BaseActivity {
 
 
 	String TAG = "OptionsActivity";

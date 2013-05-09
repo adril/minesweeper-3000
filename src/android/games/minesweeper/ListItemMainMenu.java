@@ -1,6 +1,6 @@
 package android.games.minesweeper;
 
-public class ListItemMainMenuDetails {
+public class ListItemMainMenu {
 
 	private String name;
 	private int image;

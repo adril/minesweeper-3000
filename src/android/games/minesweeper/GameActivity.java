@@ -14,7 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class GameActivity extends Activity {
+public class GameActivity extends BaseActivity {
 	public static final String KEY_DIFFICULTY = "com.codedazzle.minesweeper.difficulty";
 	public static final int DIFFICULTY_EASY = 0;
 	public static final int DIFFICULTY_MEDIUM = 1;

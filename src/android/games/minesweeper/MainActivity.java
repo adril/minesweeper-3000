@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
 	private String TAG = "MainActivity";
 
@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 
 	private int[] image = { R.drawable.play_icon, R.drawable.heart_icon, R.drawable.cup_icon, R.drawable.skull_icon };
 
-	private ListItemMainMenuDetails item_details;
+	private ListItemMainMenu item_details;
 	private ScoreDataSource scoreDataSource;
 	private OptionDataSource optionDataSource;
 
@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
 //		actionBar.setDisplayUseLogoEnabled(false);
 		
 		//INFO: init List View with Static Data
-		ArrayList<ListItemMainMenuDetails> listItemArray = getMainMenuDetailsList();
+		ArrayList<ListItemMainMenu> listItemArray = getMainMenuDetailsList();
 		final ListView listView = (ListView)findViewById(R.id.main_list_view);
 		listView.setAdapter(new MainMenuListAdapter(listItemArray, getApplicationContext()));
 				
@@ -97,12 +97,12 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	private ArrayList<ListItemMainMenuDetails> getMainMenuDetailsList() {
+	private ArrayList<ListItemMainMenu> getMainMenuDetailsList() {
 		
-		ArrayList<ListItemMainMenuDetails> results = new ArrayList<ListItemMainMenuDetails>();
+		ArrayList<ListItemMainMenu> results = new ArrayList<ListItemMainMenu>();
 
 		for (int i = 0; i < text.length; i++) {
-			item_details = new ListItemMainMenuDetails();
+			item_details = new ListItemMainMenu();
 			item_details.setName(text[i]);
 			item_details.setImage(image[i]);
 			results.add(item_details);
