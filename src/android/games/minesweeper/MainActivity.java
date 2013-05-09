@@ -1,7 +1,6 @@
 package android.games.minesweeper;
 
 import java.util.ArrayList;
-
 import java.util.List;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -39,22 +38,22 @@ public class MainActivity extends BaseActivity {
 
 		((Globals)getApplication()).initialize();
 		// SCORE DB
-	  scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
+		scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
 		scoreDataSource.createScore(12000, "test", 12, 1, 33);
 		List<Score> scores = scoreDataSource.getAllScores();
 		for (int i = 0; i < scores.size(); i++)
 		{
 			Log.d("Scores", scores.get(i).toString());
 		}
-		
+
 		// OPTIONS DB
-    optionDataSource = ((Globals)getApplication()).getOptionDataSource();
-    optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
-    optionDataSource.deleteAllOptions();
-    optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
-    Option optTmp = optionDataSource.getOption();
-    optionDataSource.deleteOption(optTmp);
-    optionDataSource.createOption("Easy", game_size.GAME_SIZE_MEDIUM.ordinal(), level.LEVEL_MEDIUM.ordinal());
+		optionDataSource = ((Globals)getApplication()).getOptionDataSource();
+		optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
+		optionDataSource.deleteAllOptions();
+		optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
+		Option optTmp = optionDataSource.getOption();
+		optionDataSource.deleteOption(optTmp);
+		optionDataSource.createOption("Easy", game_size.GAME_SIZE_MEDIUM.ordinal(), level.LEVEL_MEDIUM.ordinal());
 		List<Option> options = optionDataSource.getAllOptions();
 		for (int i = 0; i < options.size(); i++)
 		{
@@ -62,16 +61,13 @@ public class MainActivity extends BaseActivity {
 			Log.d("Options", options.get(i).toString());
 		}
 
-//		ActionBar actionBar = getActionBar();	   
-//		actionBar.setDisplayUseLogoEnabled(false);
-		
 		//INFO: init List View with Static Data
 		ArrayList<ListItemMainMenu> listItemArray = getMainMenuDetailsList();
 		final ListView listView = (ListView)findViewById(R.id.main_list_view);
 		listView.setAdapter(new MainMenuListAdapter(listItemArray, getApplicationContext()));
-				
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
-		    
+
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -88,7 +84,7 @@ public class MainActivity extends BaseActivity {
 				case 2:
 					Intent io = new Intent(MainActivity.this, OptionsActivity.class);
 					startActivity(io);
-					
+
 					break;
 				case 3:
 					Intent ih = new Intent(MainActivity.this, HelpActivity.class);
@@ -103,7 +99,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private ArrayList<ListItemMainMenu> getMainMenuDetailsList() {
-		
+
 		ArrayList<ListItemMainMenu> results = new ArrayList<ListItemMainMenu>();
 
 		for (int i = 0; i < text.length; i++) {
@@ -115,7 +111,7 @@ public class MainActivity extends BaseActivity {
 
 		return results;
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
