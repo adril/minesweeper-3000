@@ -1,10 +1,14 @@
 package android.games.minesweeper;
 
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
 import android.text.StaticLayout;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
 
 public class OptionsActivity extends BaseActivity {
 
@@ -44,17 +49,17 @@ public class OptionsActivity extends BaseActivity {
 				int selected_lvl = rg_lvl.getCheckedRadioButtonId();
 
 				rb_selected_lvl = (RadioButton) findViewById(selected_lvl);
-				Log.d("Checked SELECTED IS : ", (String) rb_selected_lvl.getText() + " | " + selected_lvl);
+				Log.d(TAG, "Checked SELECTED IS : " + (String) rb_selected_lvl.getText() + " | " + selected_lvl);
 
 				switch (selected_lvl) {
 				case R.id.lvl_easy:
-					optionRecord.setLevel(0);
+					optionRecord.setLevel(level.LEVEL_EASY.ordinal());
 					break;
 				case R.id.lvl_medium:
-					optionRecord.setLevel(1);
+					optionRecord.setLevel(level.LEVEL_MEDIUM.ordinal());
 					break;
 				case R.id.lvl_hard:
-					optionRecord.setLevel(2);
+					optionRecord.setLevel(level.LEVEL_HARD.ordinal());
 					break;
 
 				default:
@@ -69,17 +74,17 @@ public class OptionsActivity extends BaseActivity {
 				int selected_size = rg_size.getCheckedRadioButtonId();
 
 				rb_selected_size = (RadioButton) findViewById(selected_size);
-				Log.d("Checked SELECTED IS : ", (String) rb_selected_size.getText());
+				Log.d("OptionsActivity", "Checked SELECTED IS: " + rb_selected_size.getText());
 
 				switch (selected_size) {
 				case R.id.size_small:
-					optionRecord.setSize(0);
+					optionRecord.setSize(game_size.GAME_SIZE_SMALL.ordinal());
 					break;
 				case R.id.size_medium:
-					optionRecord.setSize(1);
+					optionRecord.setSize(game_size.GAME_SIZE_MEDIUM.ordinal());
 					break;
 				case R.id.size_big:
-					optionRecord.setSize(2);
+					optionRecord.setSize(game_size.GAME_SIZE_BIG.ordinal());
 					break;
 
 				default:
@@ -87,26 +92,45 @@ public class OptionsActivity extends BaseActivity {
 				}
 			}
 		});
-
-		txt_player_name.setOnKeyListener(new OnKeyListener() {
-
+		
+		txt_player_name.addTextChangedListener(new TextWatcher() {
 			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-						(keyCode == KeyEvent.KEYCODE_ENTER)) {
-					String player_name = txt_player_name.getText().toString();
-					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(txt_player_name.getWindowToken(), 0);
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String player_name = txt_player_name.getText().toString();
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(txt_player_name.getWindowToken(), 0);
 
-					//INFO: setting name
-					optionRecord.setName(player_name);
+				//INFO: setting name
+				optionRecord.setName(player_name);
 
-					Log.d("Edit Text PLAYER NAME : ", player_name);
-					return true;
-				}
-				return false;
+				Log.d(TAG, "Edit Text PLAYER NAME : " + player_name);
 			}
+			@Override
+			public void afterTextChanged(Editable arg0) { }
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) { }
 		});
+
+//		txt_player_name.setOnKeyListener(new OnKeyListener() {
+//
+//			@Override
+//			public boolean onKey(View v, int keyCode, KeyEvent event) {
+//				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+////						(keyCode == KeyEvent.KEYCODE_ENTER)) {
+//					String player_name = txt_player_name.getText().toString();
+//					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//					imm.hideSoftInputFromWindow(txt_player_name.getWindowToken(), 0);
+//
+//					//INFO: setting name
+//					optionRecord.setName(player_name);
+//
+//					Log.d(TAG, "Edit Text PLAYER NAME : " + player_name);
+//					return true;
+//				}
+//				return false;
+//			}
+//		});
 
 		bt_remove.setOnClickListener(new OnClickListener() {
 
@@ -160,16 +184,16 @@ public class OptionsActivity extends BaseActivity {
 	}
 
 	private void setupOption() {
-		//INFO: debug
-		optionRecord = new Option();
-		optionRecord.setId(0);
-		optionRecord.setLevel(1);
-		optionRecord.setName("Adril");
-		optionRecord.setSize(1);
+		// gets the unique option record in the database
+		optionRecord = ((Globals)getApplication()).getOptionDataSource().getOption();
+		// optionRecord.setId(0);
+		// optionRecord.setLevel(1);
+		// optionRecord.setName("Adril");
+		// optionRecord.setSize(1);
 
-		int lvlButtonId = buttonIdForLevel(1);//(optionRecord.getLevel());
+		int lvlButtonId = buttonIdForLevel((int)(optionRecord.getLevel()));
 		rg_lvl.check(lvlButtonId);
-		int sizeButtonId = buttonIdForSize(1);//(optionRecord.getSize());
+		int sizeButtonId = buttonIdForSize((int)(optionRecord.getSize()));
 		rg_size.check(sizeButtonId);
 		txt_player_name.setText(optionRecord.getName());
 
@@ -202,7 +226,15 @@ public class OptionsActivity extends BaseActivity {
 		super.onStop();
 		
 		Log.d(TAG, "on STOP");
-		//TODO: save db
-
+		
+		// Saves the current options in the database.
+		List<Option> options = ((Globals)getApplication()).getOptionDataSource().getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+			Log.d(TAG, options.get(i).toString());
+		Log.d(TAG, optionRecord.getName());
+		((Globals)getApplication()).getOptionDataSource().updateOption(optionRecord);
+		options = ((Globals)getApplication()).getOptionDataSource().getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+			Log.d(TAG, options.get(i).toString());
 	}
 }

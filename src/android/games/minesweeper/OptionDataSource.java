@@ -13,7 +13,10 @@ import android.util.Log;
 // Database data accessor for the options resources in Options table
 // There should always be one and only one record in this table.
 //
-public class OptionDataSource {
+// From anywhere in the application, access OptionDataSource (which
+// give access to the options records in the database) using:
+// optionDataSource = ((Globals)getApplication()).getOptionDataSource();
+public class OptionDataSource implements IDataSource {
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -58,9 +61,9 @@ public class OptionDataSource {
 		values.put(MySqliteHelper.COLUMN_LEVEL, option.getLevel());
 		values.put(MySqliteHelper.COLUMN_SIZE, option.getSize());
 		String strFilter = MySqliteHelper.COLUMN_ID + " = " + option.getId();
-		long insertId = database.update(MySqliteHelper.TABLE_OPTIONS, values, strFilter, null);
+		database.update(MySqliteHelper.TABLE_OPTIONS, values, strFilter, null);
 		Cursor cursor = database.query(MySqliteHelper.TABLE_OPTIONS, allColumns,
-				MySqliteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+				strFilter, null, null, null, null);
 		cursor.moveToFirst();
 		Option updatedOption = cursorToOption(cursor);
 		cursor.close();
@@ -113,5 +116,17 @@ public class OptionDataSource {
 		Option.setSize(cursor.getLong(2));
 		Option.setLevel(cursor.getLong(3));
 		return Option;
+	}
+
+	@Override
+	public void seed() {
+		int optionsCount = getAllOptions().size();
+		if (optionsCount == 0)
+			createOption("Default player", game_size.GAME_SIZE_SMALL.ordinal(), level.LEVEL_EASY.ordinal());
+		else if (optionsCount > 1) {
+			Option tmpOption = getOption();
+			deleteAllOptions();
+			createOption(tmpOption.getName(), tmpOption.getSize(), tmpOption.getLevel());
+		}
 	}
 }

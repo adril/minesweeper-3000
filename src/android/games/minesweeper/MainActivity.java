@@ -21,61 +21,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class MainActivity extends BaseActivity {
-
 	private String TAG = "MainActivity";
-
 	private String[] text = { "Play", "Score Records", "Options", "Help" };
-
 	private int[] image = { R.drawable.play_icon, R.drawable.heart_icon, R.drawable.cup_icon, R.drawable.skull_icon };
-
-	private ListItemMainMenuDetails item_details;
-	private ScoreDataSource scoreDataSource; // For db example. See example in onCreate function.
-	private OptionDataSource optionDataSource; // For db example. See example in onCreate function.
+	private ListItemMainMenu item_details;
+	private Globals globals;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		// Instantiates ScoreDataSource and OptionDataSource in the Globals variable
-		// The Globals variable declares variables that can be accessed anywhere in the code.
-		// Access with: (Globals)getApplication() 
-		((Globals)getApplication()).initialize();
 		
-		// SCORE DB EXAMPLE
-		// From anywhere in the application, access ScoreDataSource (which
-		// give access to the scores records in the database) using:
-		scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
-		// then manipulate your data:
-		scoreDataSource.createScore(12000, "test", game_size.GAME_SIZE_BIG.ordinal(),
-				level.LEVEL_HARD.ordinal(), 33);
-		scoreDataSource.deleteAllScores();
-		List<Score> scores = scoreDataSource.getAllScores();
-		for (int i = 0; i < scores.size(); i++)
-		{
-			Log.d("Database", scores.get(i).toString());
-		}
-
-		// OPTIONS DB EXAMPLE
-		// From anywhere in the application, access OptionDataSource (which
-		// give access to the options records in the database) using:
-		optionDataSource = ((Globals)getApplication()).getOptionDataSource();
-		// then manipulate your data:
-		optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
-		optionDataSource.deleteAllOptions();
-		optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
-		Option optTmp = optionDataSource.getOption();
-		optionDataSource.deleteOption(optTmp);
-		optionDataSource.createOption("Easy", game_size.GAME_SIZE_MEDIUM.ordinal(), level.LEVEL_MEDIUM.ordinal());
-		List<Option> options = optionDataSource.getAllOptions();
-		for (int i = 0; i < options.size(); i++)
-		{
-			options.get(i).setName(options.get(i).getName() + " modified");
-			Log.d("Options", options.get(i).toString());
-		}
-
-		//		ActionBar actionBar = getActionBar();	   
-		//		actionBar.setDisplayUseLogoEnabled(false);
+		this.initializeDatabase();
 
 		//INFO: init List View with Static Data
 		ArrayList<ListItemMainMenu> listItemArray = getMainMenuDetailsList();
@@ -114,6 +71,14 @@ public class MainActivity extends BaseActivity {
 		});
 	}
 
+	private void initializeDatabase() {
+		// Instantiates ScoreDataSource and OptionDataSource in the Globals variable
+		// The Globals variable declares variables that can be accessed anywhere in the code.
+		// Access with: (Globals)getApplication()
+		((Globals)getApplication()).initializeDatabase();
+		((Globals)getApplication()).seedDatabase();
+	}
+
 	private ArrayList<ListItemMainMenu> getMainMenuDetailsList() {
 		
 		ArrayList<ListItemMainMenu> results = new ArrayList<ListItemMainMenu>();
@@ -137,7 +102,7 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		
+		((Globals)getApplication()).closeDatabase();
 		super.onDestroy();
 	}
 }

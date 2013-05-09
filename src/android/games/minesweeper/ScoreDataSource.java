@@ -15,7 +15,10 @@ import android.util.Log;
 
 // Database data accessor for the scores resources in HighScores table
 //
-public class ScoreDataSource {
+// From anywhere in the application, access ScoreDataSource (which
+// give access to the scores records in the database) using:
+// scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
+public class ScoreDataSource implements IDataSource {
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -123,4 +126,7 @@ public class ScoreDataSource {
 		Score.setDate(cursor.getString(3));
 		return Score;
 	}
+
+	@Override
+	public void seed() { }
 }
