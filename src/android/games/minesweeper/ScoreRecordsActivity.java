@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ScoreRecordsActivity extends Activity implements OnClickListener {
+public class ScoreRecordsActivity extends BaseActivity implements OnClickListener {
 	
 	class ScoreRecordsText { public String text1, text2; }
 	
@@ -24,19 +24,22 @@ public class ScoreRecordsActivity extends Activity implements OnClickListener {
 
 	private int[] image = { R.drawable.icon_good, R.drawable.icon_normal, R.drawable.icon_bad };
 	
-	ScoreDataSource dataSource = new ScoreDataSource(this);
+	private ScoreDataSource dataSource;
 	private List<Score> Scores = new ArrayList<Score>();
 	private ListItemScoreRecords item_details;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		dataSource = new ScoreDataSource(this);
+		dataSource.open();
 		Scores = dataSource.getAllScores();
 		text = getScoreRecordsText();
 		super.onCreate(savedInstanceState);
 		final ListView listView = (ListView)findViewById(R.id.score_list_view);
 		ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList();
-		listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
-		
+		if (listItemArray.isEmpty() == false)
+			listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+	
 		listView.setOnItemClickListener(new OnItemClickListener() {
 		    
 			@Override
@@ -67,12 +70,13 @@ public class ScoreRecordsActivity extends Activity implements OnClickListener {
 
 		for (int i = 0; i < Scores.size(); i++) {
 			item_details = new ListItemScoreRecords();
+			Log.d(TAG, "GetScoreRecordList text1: " + text.get(i).text1 + " text2:  " + text.get(i).text2);
 			item_details.setText(text.get(i).text1, text.get(i).text2);
 			if (Scores.get(i).getScore() < 40)
 				item_details.setImage(image[0]);
-			else if (Scores.get(i).getScore() >= 40 && Scores.get(i).getScore() <= 70)
+			else if (Scores.get(i).getScore()/1000 >= 40 && Scores.get(i).getScore()/1000 <= 70)
 				item_details.setImage(image[1]);
-			else if (Scores.get(i).getScore() > 70)
+			else if (Scores.get(i).getScore()/1000 > 70)
 				item_details.setImage(image[2]);
 			results.add(item_details);
 		}
@@ -85,7 +89,7 @@ private ArrayList<ScoreRecordsText> getScoreRecordsText() {
 		ArrayList<ScoreRecordsText> results = new ArrayList<ScoreRecordsText>();
 		ScoreRecordsText score_records_text = new ScoreRecordsText();
 		for (int i = 0; i < Scores.size(); i++) {
-			score_records_text.text1 = Scores.get(i).getScore() + " Completed with size " + Scores.get(i).getSize();
+			score_records_text.text1 = Scores.get(i).getScore()/1000 + "% Completed with size " + Scores.get(i).getSize();
 			score_records_text.text2 = Scores.get(i).getName() + " finish the game with the difficulty " + Scores.get(i).getLevel() + " in " + Scores.get(i).getDuration() + " seconds.";
 			results.add(score_records_text);
 		}

@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 public class MainMenuListAdapter extends BaseAdapter {
 
-	private static ArrayList<ListItemMainMenuDetails> itemDetailsrrayList;
+	private static ArrayList<ListItemMainMenu> itemDetailsrrayList;
 
 	LayoutInflater layoutInflator;
 	Context context;
 
-	public MainMenuListAdapter(ArrayList<ListItemMainMenuDetails> result , Context c) {
+	public MainMenuListAdapter(ArrayList<ListItemMainMenu> result , Context c) {
 		// TODO Auto-generated constructor stub
 		itemDetailsrrayList = result;
 		context = c;
