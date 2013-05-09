@@ -13,86 +13,120 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class ScoreDataSource {
+// Database data accessor for the scores resources in HighScores table
+//
+// From anywhere in the application, access ScoreDataSource (which
+// give access to the scores records in the database) using:
+// scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
+public class ScoreDataSource implements IDataSource {
 
-  // Database fields
-  private SQLiteDatabase database;
-  private MySqliteHelper dbHelper;
-  private String[] allColumns = { MySqliteHelper.COLUMN_ID,
-	      MySqliteHelper.COLUMN_HIGHSCORE,
-	      MySqliteHelper.COLUMN_NAME,
-	      MySqliteHelper.COLUMN_DATE,
-	      MySqliteHelper.COLUMN_DURATION,
-	      MySqliteHelper.COLUMN_LEVEL,
-	      MySqliteHelper.COLUMN_SIZE };
+	// Database fields
+	private SQLiteDatabase database;
+	private MySqliteHelper dbHelper;
+	private String[] allColumns = { MySqliteHelper.COLUMN_ID,
+			MySqliteHelper.COLUMN_HIGHSCORE,
+			MySqliteHelper.COLUMN_NAME,
+			MySqliteHelper.COLUMN_DATE,
+			MySqliteHelper.COLUMN_DURATION,
+			MySqliteHelper.COLUMN_LEVEL,
+			MySqliteHelper.COLUMN_SIZE };
 
-  public ScoreDataSource(Context context) {
-    dbHelper = new MySqliteHelper(context);
-  }
+	public ScoreDataSource(Context context) {
+		dbHelper = new MySqliteHelper(context);
+	}
 
-  public void open() throws SQLException {
-    database = dbHelper.getWritableDatabase();
-  }
+	public void open() throws SQLException {
+		database = dbHelper.getWritableDatabase();
+	}
 
-  public void close() {
-    dbHelper.close();
-  }
+	public void close() {
+		dbHelper.close();
+	}
 
-  @SuppressLint("SimpleDateFormat")
-public Score createScore(long score, String name, long size, long level, long duration) {
-	  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-	  Date date = new Date();
-	  Log.d("Scores", dateFormat.format(date));
-    ContentValues values = new ContentValues();
-    values.put(MySqliteHelper.COLUMN_HIGHSCORE, score);
-    values.put(MySqliteHelper.COLUMN_NAME, name);
-    values.put(MySqliteHelper.COLUMN_LEVEL, level);
-    values.put(MySqliteHelper.COLUMN_SIZE, size);
-    values.put(MySqliteHelper.COLUMN_DATE, dateFormat.format(date));
-    values.put(MySqliteHelper.COLUMN_DURATION, duration);
-    long insertId = database.insert(MySqliteHelper.TABLE_HIGHSCORES, null,
-        values);
-    Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES, allColumns,
-        MySqliteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
-    cursor.moveToFirst();
-    Score newScore = cursorToScore(cursor);
-    cursor.close();
-    return newScore;
-  }
+	@SuppressLint("SimpleDateFormat")
+	public Score createScore(long score, String name, long size, long level, long duration) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date date = new Date();
+		ContentValues values = new ContentValues();
+		values.put(MySqliteHelper.COLUMN_HIGHSCORE, score);
+		values.put(MySqliteHelper.COLUMN_NAME, name);
+		values.put(MySqliteHelper.COLUMN_LEVEL, level);
+		values.put(MySqliteHelper.COLUMN_SIZE, size);
+		values.put(MySqliteHelper.COLUMN_DATE, dateFormat.format(date));
+		values.put(MySqliteHelper.COLUMN_DURATION, duration);
+		long insertId = database.insert(MySqliteHelper.TABLE_HIGHSCORES, null,
+				values);
+		String strFilter = MySqliteHelper.COLUMN_ID + " = " + insertId;
+		Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES, allColumns,
+				strFilter, null, null, null, null);
+		cursor.moveToFirst();
+		Score newScore = cursorToScore(cursor);
+		Log.d("Database", "Score created with id: " + newScore.getId());
+		cursor.close();
+		return newScore;
+	}
 
-  public void deleteScore(Score Score) {
-    long id = Score.getId();
-    System.out.println("Score deleted with id: " + id);
-    database.delete(MySqliteHelper.TABLE_HIGHSCORES, MySqliteHelper.COLUMN_ID
-        + " = " + id, null);
-  }
+	public Score updateScore(Score score) {
+		ContentValues values = new ContentValues();
+		values.put(MySqliteHelper.COLUMN_HIGHSCORE, score.getScore());
+		values.put(MySqliteHelper.COLUMN_NAME, score.getName());
+		values.put(MySqliteHelper.COLUMN_LEVEL, score.getLevel());
+		values.put(MySqliteHelper.COLUMN_SIZE, score.getSize());
+		values.put(MySqliteHelper.COLUMN_DATE, score.getDate());
+		values.put(MySqliteHelper.COLUMN_DURATION, score.getDuration());
+		String strFilter = MySqliteHelper.COLUMN_ID + " = " + score.getId();
+		long insertId = database.update(MySqliteHelper.TABLE_HIGHSCORES, values, strFilter, null);
+		Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES, allColumns,
+				MySqliteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+		cursor.moveToFirst();
+		Score newScore = cursorToScore(cursor);
+		Log.d("Database", "Score updated with id: " + newScore.getId());
+		cursor.close();
+		return newScore;
+	}
 
-  public List<Score> getAllScores() {
-    List<Score> Scores = new ArrayList<Score>();
+	public void deleteScore(Score Score) {
+		long id = Score.getId();
+		Log.d("Database", "Score deleted with id: " + id);
+		database.delete(MySqliteHelper.TABLE_HIGHSCORES, MySqliteHelper.COLUMN_ID
+				+ " = " + id, null);
+	}
 
-    Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES,
-        allColumns, null, null, null, null, null);
+	public List<Score> getAllScores() {
+		List<Score> Scores = new ArrayList<Score>();
 
-    cursor.moveToFirst();
-    while (!cursor.isAfterLast()) {
-      Score Score = cursorToScore(cursor);
-      Scores.add(Score);
-      cursor.moveToNext();
-    }
-    // Make sure to close the cursor
-    cursor.close();
-    return Scores;
-  }
+		Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES,
+				allColumns, null, null, null, null, null);
 
-  private Score cursorToScore(Cursor cursor) {
-    Score Score = new Score();
-    Score.setId(cursor.getLong(0));
-    Score.setScore(cursor.getLong(1));
-    Score.setName(cursor.getString(2));
-    Score.setDuration(cursor.getLong(4));
-    Score.setSize(cursor.getLong(6));
-    Score.setLevel(cursor.getLong(5));
-    Score.setDate(cursor.getString(3));
-    return Score;
-  }
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Score Score = cursorToScore(cursor);
+			Scores.add(Score);
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+		return Scores;
+	}
+
+	public void deleteAllScores() {
+		List<Score> scores = getAllScores();
+		for (int i = 0; i < scores.size(); i++)
+			deleteScore(scores.get(i));
+	}
+
+	private Score cursorToScore(Cursor cursor) {
+		Score Score = new Score();
+		Score.setId(cursor.getLong(0));
+		Score.setScore(cursor.getLong(1));
+		Score.setName(cursor.getString(2));
+		Score.setDuration(cursor.getLong(4));
+		Score.setSize(cursor.getLong(6));
+		Score.setLevel(cursor.getLong(5));
+		Score.setDate(cursor.getString(3));
+		return Score;
+	}
+
+	@Override
+	public void seed() { }
 }

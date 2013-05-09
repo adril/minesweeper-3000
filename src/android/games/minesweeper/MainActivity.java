@@ -1,73 +1,38 @@
 package android.games.minesweeper;
 
 import java.util.ArrayList;
-import java.util.List;
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.games.minesweeper.R;
-import android.games.minesweeper.R.drawable;
-import android.games.minesweeper.R.id;
-import android.games.minesweeper.R.layout;
-import android.games.minesweeper.R.menu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class MainActivity extends BaseActivity {
-
 	private String TAG = "MainActivity";
-
 	private String[] text = { "Play", "Score Records", "Options", "Help" };
-
 	private int[] image = { R.drawable.play_icon, R.drawable.heart_icon, R.drawable.cup_icon, R.drawable.skull_icon };
-
 	private ListItemMainMenu item_details;
-	private ScoreDataSource scoreDataSource;
-	private OptionDataSource optionDataSource;
+	private Globals globals;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		((Globals)getApplication()).initialize();
-		// SCORE DB
-		scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
-		scoreDataSource.createScore(12000, "test", 12, 1, 33);
-		List<Score> scores = scoreDataSource.getAllScores();
-		for (int i = 0; i < scores.size(); i++)
-		{
-			Log.d("Scores", scores.get(i).toString());
-		}
+		this.initializeLayout();
+		this.initializeDatabase();
+	}
 
-		// OPTIONS DB
-		optionDataSource = ((Globals)getApplication()).getOptionDataSource();
-		optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
-		optionDataSource.deleteAllOptions();
-		optionDataSource.createOption("Easy", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_EASY.ordinal());
-		Option optTmp = optionDataSource.getOption();
-		optionDataSource.deleteOption(optTmp);
-		optionDataSource.createOption("Easy", game_size.GAME_SIZE_MEDIUM.ordinal(), level.LEVEL_MEDIUM.ordinal());
-		List<Option> options = optionDataSource.getAllOptions();
-		for (int i = 0; i < options.size(); i++)
-		{
-			options.get(i).setName(options.get(i).getName() + " modified");
-			Log.d("Options", options.get(i).toString());
-		}
-
-		//INFO: init List View with Static Data
+	private void initializeLayout() {
 		ArrayList<ListItemMainMenu> listItemArray = getMainMenuDetailsList();
 		final ListView listView = (ListView)findViewById(R.id.main_list_view);
 		listView.setAdapter(new MainMenuListAdapter(listItemArray, getApplicationContext()));
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -90,7 +55,6 @@ public class MainActivity extends BaseActivity {
 					Intent ih = new Intent(MainActivity.this, HelpActivity.class);
 					startActivity(ih);
 					break;
-
 				default:
 					break;
 				}
@@ -98,8 +62,16 @@ public class MainActivity extends BaseActivity {
 		});
 	}
 
-	private ArrayList<ListItemMainMenu> getMainMenuDetailsList() {
+	private void initializeDatabase() {
+		// Instantiates ScoreDataSource and OptionDataSource in the Globals variable
+		// The Globals variable declares variables that can be accessed anywhere in the code.
+		// Access with: (Globals)getApplication()
+		globals = (Globals)getApplication();
+		globals.initializeDatabase();
+		globals.seedDatabase();
+	}
 
+	private ArrayList<ListItemMainMenu> getMainMenuDetailsList() {
 		ArrayList<ListItemMainMenu> results = new ArrayList<ListItemMainMenu>();
 
 		for (int i = 0; i < text.length; i++) {
@@ -117,5 +89,11 @@ public class MainActivity extends BaseActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	protected void onDestroy() {
+		globals.closeDatabase();
+		super.onDestroy();
 	}
 }
