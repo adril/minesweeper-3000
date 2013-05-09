@@ -4,7 +4,9 @@ import java.util.Random;
 import java.util.Timer;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -15,6 +17,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class GameActivity extends BaseActivity {
+	private String TAG = "GameActivity";
+	
 	public static final String KEY_DIFFICULTY = "com.codedazzle.minesweeper.difficulty";
 	public static final int DIFFICULTY_EASY = 0;
 	public static final int DIFFICULTY_MEDIUM = 1;
@@ -39,24 +43,26 @@ public class GameActivity extends BaseActivity {
 	private boolean timerStarted;
 	private boolean minesSet;
 	private View timer;
+	
+	private TableLayout mineField;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		
-//		mineField = (TableLayout) findViewById(R.id.MineField);
-		timer = findViewById(R.id.Timer);
-		
-//        int diff = getIntent().getIntExtra(KEY_DIFFICULTY, DIFFICULTY_EASY);
-//		createGameBoard(diff);
-//		showGameBoard();
+		mineField = (TableLayout) findViewById(R.id.minefield);
+
+		createGameBoard(0);
+		setupMineField(100, 100);
+		showGameBoard();
 	}
 	
 	public void showGameBoard()
 	  {  
+	    Log.d(TAG, "showGameBoard BEGIN");
 	    //for every row
-	    for(int row=0;row<totalRows;row++)
+	    for (int row = 0; row < totalRows; row++)
 	    {
 	      //create a new table row
 	      TableRow tableRow = new TableRow(this);
@@ -64,18 +70,21 @@ public class GameActivity extends BaseActivity {
 	      tableRow.setLayoutParams(new LayoutParams((tileWH * tilePadding) * totalCols, tileWH * tilePadding));
 	      
 	      //for every column
-	      for(int col=0;col<totalCols;col++)       
+	      for (int col = 0 ;col < totalCols; col++)       
 	      {
 	        //set the width and height of the tile
 	        tiles[row][col].setLayoutParams(new LayoutParams(tileWH * tilePadding,  tileWH * tilePadding)); 
 	        //add some padding to the tile
 	        tiles[row][col].setPadding(tilePadding, tilePadding, tilePadding, tilePadding);
 	        //add the tile to the table row
+	        tiles[row][col].setBackgroundColor(Color.RED);
+		    Log.d(TAG, "Configure BOX");
 	        tableRow.addView(tiles[row][col]);
 	      }
 	      //add the row to the minefield layout
-//	      mineField.addView(tableRow,new TableLayout.LayoutParams((tileWH * tilePadding) * totalCols, tileWH * tilePadding)); 
+	      mineField.addView(tableRow, new TableLayout.LayoutParams((tileWH * tilePadding) * totalCols, tileWH * tilePadding)); 
 	    }
+	    Log.d(TAG, "showGameBoard END");
 	  }
 	
 	public void createGameBoard(int diff)
