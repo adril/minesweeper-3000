@@ -11,5 +11,13 @@
     <string name="hard_label">Hard</string>
     <string name="timer">Timer</string>
     <string name="smiley">Smiley</string>
+    
+    <string name="name_label">Player Name</string>
+    <string name="size_label">Game Size</string>
+    <string name="level_label">Level</string>
+    <string name="remove_label">Remove all Records</string>
+    <string name="small_label">Small</string>
+    <string name="big_label">Big</string>
+    <string name="b_remove">Remove</string>
 
 </resources>
