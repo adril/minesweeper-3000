@@ -42,6 +42,11 @@ public class UIBox extends Button
 		this.setBackgroundResource(R.drawable.empty);
 	}
 	
+	public void toggleFlag() {
+		this.setBackgroundResource(R.drawable.flag);
+		this.isFlag = !this.isFlag;
+	}
+	
 	public void setRow(int row) {
 		this.row = row;
 	}
@@ -100,10 +105,10 @@ public class UIBox extends Button
 		if(gameActivity.Boxes[row][column].getNoSurroundingMines() > 0)
 			return;
 
-		//go one row and column back
+		//the box on the top
 		int startRow = row-1;
 		int startCol = column-1;
-		//check 3 rows across and 3 down
+
 		int checkRows = 3;
 		int checkCols = 3;
 		if (startRow < 0) //if it is on the first row

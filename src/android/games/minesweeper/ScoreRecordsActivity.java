@@ -37,7 +37,12 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 		Scores = dataSource.getAllScores();
 		groupedScores = dataSource.getGroupedScores();
 		groupedScores.clear();
+				
 		text = getScoreRecordsText();
+
+		for (int i = 0; i < Scores.size(); i++) {
+			Log.d(TAG, text.get(i).text1);
+		}
 
 		final ListView listView = (ListView)findViewById(R.id.score_list_view);
 		ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList();
@@ -71,17 +76,19 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 	private ArrayList<ListItemScoreRecords> getScoreRecordsList() {
 		ArrayList<ListItemScoreRecords> results = new ArrayList<ListItemScoreRecords>();
 		int score;
+		ScoreRecordsText scoreRecordsText;
 
 		for (int i = 0; i < Scores.size(); i++) {
 			score = Scores.get(i).getScore();
+			scoreRecordsText = text.get(i);
 			item_details = new ListItemScoreRecords();
-			Log.d(TAG, "GetScoreRecordList text1: " + text.get(i).text1 + " text2:  " + text.get(i).text2);
-			item_details.setText(text.get(i).text1, text.get(i).text2);
-			if (score < 40)
+			Log.d(TAG, "GetScoreRecordList text1: " + scoreRecordsText.text1 + " text2:  " + scoreRecordsText.text2);
+			item_details.setText(scoreRecordsText.text1, scoreRecordsText.text2);
+			if (score < 400)
 				item_details.setImage(image[0]);
-			else if (score / 1000 >= 40 && score / 1000 <= 70)
+			else if (score >= 400 && score <= 2000)
 				item_details.setImage(image[1]);
-			else if (score / 1000 > 70)
+			else if (score > 3000)
 				item_details.setImage(image[2]);
 			results.add(item_details);
 		}
@@ -95,9 +102,10 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 		
 		for (int i = 0; i < Scores.size(); i++) {
 			score = Scores.get(i);
-			score_records_text.text1 = "Score: " + score.getScore() / 1000 + " with size " + Globals.gameSizeToString(score.getSize());
+			score_records_text.text1 = "Score: " + score.getScore() + " with size " + Globals.gameSizeToString(score.getSize());
 			score_records_text.text2 = score.getName() + " has finished the game with difficulty ";
 			score_records_text.text2 += Globals.levelToString(score.getLevel()) + " in " + Scores.get(i).getDuration() + " seconds.";
+			Log.d(TAG, "getScoreRecordsText: text: " + score_records_text.text1 + score_records_text.text2);
 			results.add(score_records_text);
 		}
 		return results;

@@ -2,6 +2,7 @@ package android.games.minesweeper;
 
 import java.util.ArrayList;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.games.minesweeper.R;
 import android.util.Log;

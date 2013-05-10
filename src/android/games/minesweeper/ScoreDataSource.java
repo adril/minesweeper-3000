@@ -184,9 +184,5 @@ public class ScoreDataSource implements IDataSource {
 	@Override
 	public void seed() {
 		Log.d(TAG, "Seeding");
-		deleteAllScores();
-		if (getAllScores().size() == 0) {
-			createScore(123456, "GOD", game_size.GAME_SIZE_BIG.ordinal(), level.LEVEL_HARD.ordinal(), 12);
-		}
 	}
 }

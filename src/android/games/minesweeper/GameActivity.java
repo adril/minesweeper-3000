@@ -156,6 +156,9 @@ public class GameActivity extends BaseActivity {
 					@Override
 					public boolean onLongClick(View view)
 					{
+						Log.d(TAG, "Clicked on box (" + curCol + ", " + curRow + ")");
+						UIBox box = (UIBox)view;
+						box.toggleFlag();
 						return true;
 					}
 				});
@@ -303,10 +306,20 @@ public class GameActivity extends BaseActivity {
 					{
 						Boxes[i][j].openBox();
 					}
+					//if there is a mine and flag
+					else if(Boxes[i][j].isMine() && Boxes[i][j].isFlag())
+					{
+						addScore(Boxes[i][j].getNoSurroundingMines() * 20);
+						Boxes[i][j].openBox();
+					}
 
 				}
 			}
 		}
+		finalizeScore();
+	}
+	
+	public void finalizeScore() {
 		scoreText.setText(new String(Integer.toString(score)));
 		this.globals.getScoreDataSource().createScore(score, options.getName(), options.getSize(), options.getLevel(), duration);
 	}
