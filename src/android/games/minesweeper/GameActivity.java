@@ -51,11 +51,20 @@ public class GameActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		
-		mineField = (TableLayout) findViewById(R.id.minefield);
+		mineField = null;//(TableLayout) findViewById(R.id.minefield);
 
-		createGameBoard(0);
-		setupMineField(100, 100);
-		showGameBoard();
+		//createGameBoard(0);
+		//setupMineField(100, 100);
+		//showGameBoard();
+	
+	//
+		
+		TextView view =  (TextView) findViewById(R.id.TextView02);
+        String s="";
+        for (int i=0; i < 100; i++) {
+          s += "Hello world";
+        }
+        view.setText(s);
 	}
 	
 	public void showGameBoard()
