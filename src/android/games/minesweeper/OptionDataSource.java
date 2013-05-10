@@ -18,6 +18,8 @@ import android.util.Log;
 // optionDataSource = ((Globals)getApplication()).getOptionDataSource();
 public class OptionDataSource implements IDataSource {
 
+	private String TAG = this.toString();
+
 	// Database fields
 	private SQLiteDatabase database;
 	private MySqliteHelper dbHelper;
@@ -51,7 +53,7 @@ public class OptionDataSource implements IDataSource {
 		cursor.moveToFirst();
 		Option newOption = cursorToOption(cursor);
 		cursor.close();
-		Log.d("Database", "Option created with id: " + newOption.getId());
+		Log.d(TAG, "Option created: " + newOption.toString());
 		return newOption;
 	}
 
@@ -67,35 +69,33 @@ public class OptionDataSource implements IDataSource {
 		cursor.moveToFirst();
 		Option updatedOption = cursorToOption(cursor);
 		cursor.close();
-		Log.d("Database", "Option updated with id: " + updatedOption.getId());
+		Log.d(TAG, "Option updated: " + updatedOption.toString());
 		return updatedOption;
 	}
 
-	public void deleteOption(Option Option) {
-		long id = Option.getId();
-		Log.d("Database", "Option deleted with id: " + id);
-		database.delete(MySqliteHelper.TABLE_OPTIONS, MySqliteHelper.COLUMN_ID
-				+ " = " + id, null);
+	public void deleteOption(Option option) {
+		String strFilter = MySqliteHelper.COLUMN_ID + " = " + option.getId();
+		Log.d(TAG, "Option deleted: " + option.toString());
+		database.delete(MySqliteHelper.TABLE_OPTIONS, strFilter, null);
 	}
 
 	public List<Option> getAllOptions() {
-		List<Option> Options = new ArrayList<Option>();
-
+		List<Option> options = new ArrayList<Option>();
 		Cursor cursor = database.query(MySqliteHelper.TABLE_OPTIONS,
 				allColumns, null, null, null, null, null);
-
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Option Option = cursorToOption(cursor);
-			Options.add(Option);
+			Option option = cursorToOption(cursor);
+			options.add(option);
+			Log.d(TAG, "Get option: " + option.toString());
 			cursor.moveToNext();
 		}
-		// Make sure to close the cursor
 		cursor.close();
-		return Options;
+		return options;
 	}
 
 	public void deleteAllOptions() {
+		Log.d(TAG, "Deleting all options records");
 		List<Option> options = getAllOptions();
 		for (int i = 0; i < options.size(); i++)
 			deleteOption(options.get(i));
@@ -106,20 +106,22 @@ public class OptionDataSource implements IDataSource {
 		cursor.moveToFirst();
 		Option option = cursorToOption(cursor);
 		cursor.close();
+		Log.d(TAG, "Get option: " + option.toString());
 		return option;
 	}
 
 	private Option cursorToOption(Cursor cursor) {
-		Option Option = new Option();
-		Option.setId(cursor.getLong(0));
-		Option.setName(cursor.getString(1));
-		Option.setSize(cursor.getLong(2));
-		Option.setLevel(cursor.getLong(3));
-		return Option;
+		Option option = new Option();
+		option.setId(cursor.getLong(0));
+		option.setName(cursor.getString(1));
+		option.setSize(cursor.getInt(2));
+		option.setLevel(cursor.getInt(3));
+		return option;
 	}
 
 	@Override
 	public void seed() {
+		Log.d(TAG, "Seeding");
 		int optionsCount = getAllOptions().size();
 		if (optionsCount == 0)
 			createOption("Default player", game_size.GAME_SIZE_SMALL.ordinal(), level.LEVEL_EASY.ordinal());

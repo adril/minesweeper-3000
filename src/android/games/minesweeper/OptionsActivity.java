@@ -4,22 +4,18 @@ package android.games.minesweeper;
 import java.util.List;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
-import android.text.StaticLayout;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;import android.view.View.OnKeyListener;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.TextView;
 
 public class OptionsActivity extends BaseActivity {
 
@@ -34,6 +30,45 @@ public class OptionsActivity extends BaseActivity {
 	Button		bt_remove;
 
 	Option optionRecord;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_options);
+
+		//TODO: set Option with model
+		// Options options = Global.getOption(); 
+		//setControl with options
+		//edition -> modification de Options
+		//Quit view -> save option
+
+		setupView();
+		setupListner();		
+		setupOption();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "on DESTROY");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		Log.d(TAG, "on STOP");
+		
+		// Saves the current options in the database.
+		List<Option> options = ((Globals)getApplication()).getOptionDataSource().getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+			Log.d(TAG, options.get(i).toString());
+		Log.d(TAG, optionRecord.getName());
+		((Globals)getApplication()).getOptionDataSource().updateOption(optionRecord);
+		options = ((Globals)getApplication()).getOptionDataSource().getAllOptions();
+		for (int i = 0; i < options.size(); i++)
+			Log.d(TAG, options.get(i).toString());
+	}
 
 	private void setupView() {
 		rg_lvl = (RadioGroup)super.findViewById(R.id.rg_lvl);
@@ -112,26 +147,6 @@ public class OptionsActivity extends BaseActivity {
 					int arg2, int arg3) { }
 		});
 
-//		txt_player_name.setOnKeyListener(new OnKeyListener() {
-//
-//			@Override
-//			public boolean onKey(View v, int keyCode, KeyEvent event) {
-//				if (event.getAction() == KeyEvent.ACTION_DOWN) {
-////						(keyCode == KeyEvent.KEYCODE_ENTER)) {
-//					String player_name = txt_player_name.getText().toString();
-//					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//					imm.hideSoftInputFromWindow(txt_player_name.getWindowToken(), 0);
-//
-//					//INFO: setting name
-//					optionRecord.setName(player_name);
-//
-//					Log.d(TAG, "Edit Text PLAYER NAME : " + player_name);
-//					return true;
-//				}
-//				return false;
-//			}
-//		});
-
 		bt_remove.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -186,10 +201,6 @@ public class OptionsActivity extends BaseActivity {
 	private void setupOption() {
 		// gets the unique option record in the database
 		optionRecord = ((Globals)getApplication()).getOptionDataSource().getOption();
-		// optionRecord.setId(0);
-		// optionRecord.setLevel(1);
-		// optionRecord.setName("Adril");
-		// optionRecord.setSize(1);
 
 		int lvlButtonId = buttonIdForLevel((int)(optionRecord.getLevel()));
 		rg_lvl.check(lvlButtonId);
@@ -197,44 +208,5 @@ public class OptionsActivity extends BaseActivity {
 		rg_size.check(sizeButtonId);
 		txt_player_name.setText(optionRecord.getName());
 
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_options);
-
-		//TODO: set Option with model
-		// Options options = Global.getOption(); 
-		//setControl with options
-		//edition -> modification de Options
-		//Quit view -> save option
-
-		setupView();
-		setupListner();		
-		setupOption();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		Log.d(TAG, "on DESTROY");
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		
-		Log.d(TAG, "on STOP");
-		
-		// Saves the current options in the database.
-		List<Option> options = ((Globals)getApplication()).getOptionDataSource().getAllOptions();
-		for (int i = 0; i < options.size(); i++)
-			Log.d(TAG, options.get(i).toString());
-		Log.d(TAG, optionRecord.getName());
-		((Globals)getApplication()).getOptionDataSource().updateOption(optionRecord);
-		options = ((Globals)getApplication()).getOptionDataSource().getAllOptions();
-		for (int i = 0; i < options.size(); i++)
-			Log.d(TAG, options.get(i).toString());
 	}
 }

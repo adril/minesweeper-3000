@@ -18,7 +18,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
   public static final String COLUMN_LEVEL = "level";
 
   private static final String DATABASE_NAME = "minesweeper.db";
-  private static final int DATABASE_VERSION = 7;
+  private static final int DATABASE_VERSION = 8;
 
   // Database creation sql statement
   private static final String DATABASE_CREATE_HIGHSCORES = "create table "

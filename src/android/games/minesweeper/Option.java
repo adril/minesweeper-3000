@@ -1,60 +1,62 @@
 package android.games.minesweeper;
 
 enum level {
- LEVEL_EASY,
- LEVEL_MEDIUM,
- LEVEL_HARD
+	LEVEL_EASY,
+	LEVEL_MEDIUM,
+	LEVEL_HARD
 };
 
 enum game_size {
- GAME_SIZE_SMALL,
- GAME_SIZE_MEDIUM,
- GAME_SIZE_BIG
+	GAME_SIZE_SMALL,
+	GAME_SIZE_MEDIUM,
+	GAME_SIZE_BIG
 };
 
 public class Option {
-  private long id;
-  private long level;
-  private long size;
-  private String name;
+	private String TAG = "Option";
 
-  public long getId() {
-    return id;
-  }
+	private long id;
+	private int level;
+	private int size;
+	private String name;
 
-  public void setId(long id) {
-    this.id = id;
-  }
+	public long getId() {
+		return id;
+	}
 
-  public long getLevel() {
-    return level;
-  }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-  public void setLevel(long level) {
-    this.level = level;
-  }
+	public int getLevel() {
+		return level;
+	}
 
-  public long getSize() {
-    return size;
-  }
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
-  public void setSize(long size) {
-    this.size = size;
-  }
+	public int getSize() {
+		return size;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public void setSize(int size) {
+		this.size = size;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  @Override
-  public String toString() {
-    return "Option number " + String.valueOf(id)
-    		+ ", level:" + String.valueOf(level)
-    		+ ", size:" + String.valueOf(size)
-    		+ ", name:" + name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return TAG + " { _id: " + String.valueOf(id)
+			+ ", level: " + String.valueOf(level)
+			+ ", size: " + String.valueOf(size)
+			+ ", name: " + name + " }";
+	}
 }
