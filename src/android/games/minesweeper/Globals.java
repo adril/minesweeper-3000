@@ -30,4 +30,36 @@ public class Globals extends Application {
 		this.optionDataSource.seed();
 		this.scoreDataSource.seed();
 	}
+
+	public static String levelToString(int level) {
+		switch (level) {
+		case 0:
+			return "easy";
+		case 1:
+			return "medium";
+		case 2:
+			return "hard";
+		default:
+			return "unknown";
+		}
+	}
+
+	public static String gameSizeToString(int size) {
+		switch (size) {
+		case 0:
+			return "small";
+		case 1:
+			return "medium";
+		case 2:
+			return "large";
+		default:
+			return "unknown";
+		}
+	}
+	
+	public static String toTitleCase(String string) {
+		char[] charArray = string.toCharArray();
+		charArray[0] = Character.toUpperCase(charArray[0]);
+		return new String(charArray);
+	}
 }

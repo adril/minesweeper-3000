@@ -37,46 +37,49 @@ public final class R {
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int cup_icon=0x7f020000;
-        public static final int heart_icon=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int icon_bad=0x7f020003;
-        public static final int icon_good=0x7f020004;
-        public static final int icon_normal=0x7f020005;
-        public static final int item_main_menu_selector=0x7f020006;
-        public static final int play_icon=0x7f020007;
-        public static final int skull_icon=0x7f020008;
-        public static final int tile=0x7f020009;
+        public static final int bomb=0x7f020000;
+        public static final int cup_icon=0x7f020001;
+        public static final int empty=0x7f020002;
+        public static final int emptyauto=0x7f020003;
+        public static final int flag=0x7f020004;
+        public static final int heart_icon=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int icon_bad=0x7f020007;
+        public static final int icon_good=0x7f020008;
+        public static final int icon_normal=0x7f020009;
+        public static final int item_main_menu_selector=0x7f02000a;
+        public static final int play_icon=0x7f02000b;
+        public static final int skull_icon=0x7f02000c;
     }
     public static final class id {
-        public static final int Button01=0x7f0a0004;
-        public static final int Button02=0x7f0a0005;
-        public static final int HighScoresTitle=0x7f0a0015;
-        public static final int LinearLayout01=0x7f0a0000;
-        public static final int LinearLayout02=0x7f0a0003;
-        public static final int TextView01=0x7f0a0001;
-        public static final int TextView02=0x7f0a0002;
+        public static final int HighScoresTitle=0x7f0a0014;
+        public static final int MineField=0x7f0a0004;
+        public static final int Score=0x7f0a0001;
+        public static final int Timer=0x7f0a0000;
         public static final int action_settings=0x7f0a001b;
-        public static final int b_remove=0x7f0a0014;
-        public static final int e_name=0x7f0a0012;
-        public static final int imageView1=0x7f0a0018;
-        public static final int ll=0x7f0a0017;
-        public static final int lvl_easy=0x7f0a0009;
-        public static final int lvl_hard=0x7f0a000b;
-        public static final int lvl_medium=0x7f0a000a;
-        public static final int main_list_view=0x7f0a0006;
-        public static final int rg_lvl=0x7f0a0008;
-        public static final int rg_size=0x7f0a000d;
-        public static final int score_list_view=0x7f0a0016;
-        public static final int size_big=0x7f0a0010;
-        public static final int size_medium=0x7f0a000f;
-        public static final int size_small=0x7f0a000e;
-        public static final int t_level=0x7f0a0007;
-        public static final int t_name=0x7f0a0011;
-        public static final int t_remove=0x7f0a0013;
-        public static final int t_size=0x7f0a000c;
-        public static final int textView1=0x7f0a0019;
-        public static final int textView2=0x7f0a001a;
+        public static final int b_remove=0x7f0a0013;
+        public static final int e_name=0x7f0a0011;
+        public static final int hScroll=0x7f0a0003;
+        public static final int imageView1=0x7f0a0017;
+        public static final int ll=0x7f0a0016;
+        public static final int lvl_easy=0x7f0a0008;
+        public static final int lvl_hard=0x7f0a000a;
+        public static final int lvl_medium=0x7f0a0009;
+        public static final int main_list_view=0x7f0a0005;
+        public static final int new_game=0x7f0a001a;
+        public static final int rg_lvl=0x7f0a0007;
+        public static final int rg_size=0x7f0a000c;
+        public static final int score_list_view=0x7f0a0015;
+        public static final int size_big=0x7f0a000f;
+        public static final int size_medium=0x7f0a000e;
+        public static final int size_small=0x7f0a000d;
+        public static final int t_level=0x7f0a0006;
+        public static final int t_name=0x7f0a0010;
+        public static final int t_remove=0x7f0a0012;
+        public static final int t_size=0x7f0a000b;
+        public static final int textView1=0x7f0a0018;
+        public static final int textView2=0x7f0a0019;
+        public static final int vScroll=0x7f0a0002;
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;
@@ -88,7 +91,8 @@ public final class R {
         public static final int item_score_record=0x7f030006;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
+        public static final int game_menu=0x7f090000;
+        public static final int main=0x7f090001;
     }
     public static final class string {
         public static final int app_name=0x7f070000;

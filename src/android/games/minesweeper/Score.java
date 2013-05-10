@@ -1,78 +1,81 @@
 package android.games.minesweeper;
 
 public class Score {
-  private long id;
-  private long score;
-  private String name;
-  private long size;
-  private String date;
-  private long duration;
-  private long level;
+	
+	private String TAG = "Score";
 
-  public long getId() {
-    return id;
-  }
+	private long id;
+	private int score;
+	private String name;
+	private int size;
+	private String date;
+	private int duration;
+	private int level;
 
-  public void setId(long id) {
-    this.id = id;
-  }
+	public long getId() {
+		return id;
+	}
 
-  public long getScore() {
-    return score;
-  }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-  public void setScore(long score) {
-    this.score = score;
-  }
+	public int getScore() {
+		return score;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public void setScore(int score) {
+		this.score = score;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public long getSize() {
-    return size;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public void setSize(long size) {
-    this.size = size;
-  }
+	public int getSize() {
+		return size;
+	}
 
-  public String getDate() {
-    return date;
-  }
+	public void setSize(int size) {
+		this.size = size;
+	}
 
-  public void setDate(String date) {
-    this.date = date;
-  }
+	public String getDate() {
+		return date;
+	}
 
-  public long getDuration() {
-    return duration;
-  }
+	public void setDate(String date) {
+		this.date = date;
+	}
 
-  public void setDuration(long duration) {
-    this.duration = duration;
-  }
+	public int getDuration() {
+		return duration;
+	}
 
-  public long getLevel() {
-    return level;
-  }
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
 
-  public void setLevel(long level) {
-    this.level = level;
-  }
+	public int getLevel() {
+		return level;
+	}
 
-  @Override
-  public String toString() {
-    return "Score number " + String.valueOf(id)
-    		+ ": score:" + String.valueOf(score)
-    		+ ", duration:" + String.valueOf(duration)
-    		+ ", level:" + String.valueOf(level)
-    		+ ", size:" + String.valueOf(size)
-    		+ ", date:" + date
-    		+ ", name:" + name;
-  }
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	@Override
+	public String toString() {
+		return TAG + " { _id: " + String.valueOf(id)
+			+ ", score: " + String.valueOf(score)
+			+ ", duration: " + String.valueOf(duration)
+			+ ", level: " + String.valueOf(level)
+			+ ", size: " + String.valueOf(size)
+			+ ", date: " + date
+			+ ", name: " + name + " }";
+	}
 }

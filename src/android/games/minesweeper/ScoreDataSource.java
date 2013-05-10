@@ -3,7 +3,12 @@ package android.games.minesweeper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -19,6 +24,8 @@ import android.util.Log;
 // give access to the scores records in the database) using:
 // scoreDataSource = ((Globals)getApplication()).getScoreDataSource();
 public class ScoreDataSource implements IDataSource {
+	
+	private String TAG = this.toString();
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -61,7 +68,7 @@ public class ScoreDataSource implements IDataSource {
 				strFilter, null, null, null, null);
 		cursor.moveToFirst();
 		Score newScore = cursorToScore(cursor);
-		Log.d("Database", "Score created with id: " + newScore.getId());
+		Log.d(TAG, "Score created: " + newScore.toString());
 		cursor.close();
 		return newScore;
 	}
@@ -80,36 +87,83 @@ public class ScoreDataSource implements IDataSource {
 				MySqliteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
 		cursor.moveToFirst();
 		Score newScore = cursorToScore(cursor);
-		Log.d("Database", "Score updated with id: " + newScore.getId());
+		Log.d(TAG, "Score updated: " + newScore.toString());
 		cursor.close();
 		return newScore;
 	}
 
-	public void deleteScore(Score Score) {
-		long id = Score.getId();
-		Log.d("Database", "Score deleted with id: " + id);
+	public void deleteScore(Score score) {
+		long id = score.getId();
+		Log.d(TAG, "Score deleted: " + score.toString());
 		database.delete(MySqliteHelper.TABLE_HIGHSCORES, MySqliteHelper.COLUMN_ID
 				+ " = " + id, null);
 	}
 
 	public List<Score> getAllScores() {
-		List<Score> Scores = new ArrayList<Score>();
-
+		List<Score> scores = new ArrayList<Score>();
 		Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES,
 				allColumns, null, null, null, null, null);
-
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Score Score = cursorToScore(cursor);
-			Scores.add(Score);
+			Score score = cursorToScore(cursor);
+			scores.add(score);
+			Log.d(TAG, "Get score: " + score.toString());
 			cursor.moveToNext();
 		}
-		// Make sure to close the cursor
 		cursor.close();
-		return Scores;
+		return scores;
+	}
+
+	public List<Score> getScoresByLevel(int level) {
+		ContentValues values = new ContentValues();
+		values.put(MySqliteHelper.COLUMN_LEVEL, level);
+		List<Score> scores = new ArrayList<Score>();
+		Cursor cursor = database.query(MySqliteHelper.TABLE_HIGHSCORES,
+				allColumns, null, null, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Score score = cursorToScore(cursor);
+			if (score.getLevel() == level) {
+				scores.add(score);
+				Log.d(TAG, "Get score: " + score.toString());
+			}
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return scores;
+	}
+	
+	public Map<String, List<Score>> getGroupedScores() {
+		Map<String, List<Score>> groupedScores = new HashMap<String, List<Score>>();		
+		
+		int lvl = level.values().length;
+		while (lvl != 0) {
+			groupedScores.put(Globals.levelToString(lvl), getScoresByLevel(lvl));
+			lvl--;
+		}
+		
+		Set<Map.Entry<String, List<Score>>> s = groupedScores.entrySet();
+		Iterator<Entry<String, List<Score>>> it = s.iterator();
+
+        while(it.hasNext())
+        {
+            // key=value separator this by Map.Entry to get key and value
+        	Entry<String, List<Score>> m =(Entry<String, List<Score>>)it.next();
+
+            // getKey is used to get key of Map
+            String key=(String)m.getKey();
+
+            // getValue is used to get value of key in Map
+            List<Score> value=(List<Score>)m.getValue();
+            
+            Log.d(TAG, "GroupedScoresMap(Key :"+key+" Value :"+value+")");
+        }
+		
+		return groupedScores;
 	}
 
 	public void deleteAllScores() {
+		Log.d(TAG, "Deleting all scores records");
 		List<Score> scores = getAllScores();
 		for (int i = 0; i < scores.size(); i++)
 			deleteScore(scores.get(i));
@@ -118,15 +172,17 @@ public class ScoreDataSource implements IDataSource {
 	private Score cursorToScore(Cursor cursor) {
 		Score Score = new Score();
 		Score.setId(cursor.getLong(0));
-		Score.setScore(cursor.getLong(1));
+		Score.setScore(cursor.getInt(1));
 		Score.setName(cursor.getString(2));
-		Score.setDuration(cursor.getLong(4));
-		Score.setSize(cursor.getLong(6));
-		Score.setLevel(cursor.getLong(5));
+		Score.setDuration(cursor.getInt(4));
+		Score.setSize(cursor.getInt(6));
+		Score.setLevel(cursor.getInt(5));
 		Score.setDate(cursor.getString(3));
 		return Score;
 	}
 
 	@Override
-	public void seed() { }
+	public void seed() {
+		Log.d(TAG, "Seeding");
+	}
 }

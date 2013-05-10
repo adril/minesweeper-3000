@@ -3,9 +3,8 @@ package android.games.minesweeper;
 import android.games.minesweeper.ScoreDataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +24,8 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 	private int[] image = { R.drawable.icon_good, R.drawable.icon_normal, R.drawable.icon_bad };
 
 	private ScoreDataSource dataSource;
-	private List<Score> Scores = new ArrayList<Score>();
+	private List<Score> Scores;
+	private Map<String, List<Score>> groupedScores;
 	private ListItemScoreRecords item_details;
 
 	@Override
@@ -33,16 +33,20 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 		setContentView(R.layout.activity_score_record);
 		super.onCreate(savedInstanceState);
 		
-		dataSource = new ScoreDataSource(this);
-		dataSource.open();
+		dataSource = ((Globals)getApplication()).getScoreDataSource();
 		Scores = dataSource.getAllScores();
+		groupedScores = dataSource.getGroupedScores();
+		groupedScores.clear();
+				
 		text = getScoreRecordsText();
+
+		for (int i = 0; i < Scores.size(); i++) {
+			Log.d(TAG, text.get(i).text1);
+		}
 
 		final ListView listView = (ListView)findViewById(R.id.score_list_view);
 		ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList();
 		//if (listItemArray.isEmpty() == false)
-		
-		
 		
 		listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
 
@@ -70,35 +74,40 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 	}
 
 	private ArrayList<ListItemScoreRecords> getScoreRecordsList() {
-
 		ArrayList<ListItemScoreRecords> results = new ArrayList<ListItemScoreRecords>();
+		int score;
+		ScoreRecordsText scoreRecordsText;
 
 		for (int i = 0; i < Scores.size(); i++) {
+			score = Scores.get(i).getScore();
+			scoreRecordsText = text.get(i);
 			item_details = new ListItemScoreRecords();
-			Log.d(TAG, "GetScoreRecordList text1: " + text.get(i).text1 + " text2:  " + text.get(i).text2);
-			item_details.setText(text.get(i).text1, text.get(i).text2);
-			if (Scores.get(i).getScore() < 40)
+			Log.d(TAG, "GetScoreRecordList text1: " + scoreRecordsText.text1 + " text2:  " + scoreRecordsText.text2);
+			item_details.setText(scoreRecordsText.text1, scoreRecordsText.text2);
+			if (score < 400)
 				item_details.setImage(image[0]);
-			else if (Scores.get(i).getScore()/1000 >= 40 && Scores.get(i).getScore()/1000 <= 70)
+			else if (score >= 400 && score <= 2000)
 				item_details.setImage(image[1]);
-			else if (Scores.get(i).getScore()/1000 > 70)
+			else if (score > 3000)
 				item_details.setImage(image[2]);
 			results.add(item_details);
 		}
-
 		return results;
 	}
 
 	private ArrayList<ScoreRecordsText> getScoreRecordsText() {
-
 		ArrayList<ScoreRecordsText> results = new ArrayList<ScoreRecordsText>();
 		ScoreRecordsText score_records_text = new ScoreRecordsText();
+		Score score;
+		
 		for (int i = 0; i < Scores.size(); i++) {
-			score_records_text.text1 = Scores.get(i).getScore()/1000 + "% Completed with size " + Scores.get(i).getSize();
-			score_records_text.text2 = Scores.get(i).getName() + " finish the game with the difficulty " + Scores.get(i).getLevel() + " in " + Scores.get(i).getDuration() + " seconds.";
+			score = Scores.get(i);
+			score_records_text.text1 = "Score: " + score.getScore() + " with size " + Globals.gameSizeToString(score.getSize());
+			score_records_text.text2 = score.getName() + " has finished the game with difficulty ";
+			score_records_text.text2 += Globals.levelToString(score.getLevel()) + " in " + Scores.get(i).getDuration() + " seconds.";
+			Log.d(TAG, "getScoreRecordsText: text: " + score_records_text.text1 + score_records_text.text2);
 			results.add(score_records_text);
 		}
-
 		return results;
 	}
 }

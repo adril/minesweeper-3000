@@ -1,56 +1,66 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:orientation="vertical" >
+    android:background="@color/background"
+    android:stretchColumns="0,2" >
+    
 
-    <LinearLayout
-        android:id="@+id/LinearLayout01"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+    <TableRow>
+        
 
         <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dip"
-            android:paddingRight="8dip"
-            android:paddingTop="8dip"
-            android:text="This is a header"
-            android:textAppearance="?android:attr/textAppearanceLarge" >
-        </TextView>
+            android:id="@+id/Timer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_column="0"
+            android:gravity="left"
+            android:text="@string/app_name"
+            android:textColor="#000"
+            android:textSize="35sp" />
+        
 
         <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:text="@+id/TextView02" >
-        </TextView>
+            android:id="@+id/Score"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_column="0"
+            android:gravity="right"
+            android:text="@string/scores_records"
+            android:textColor="#000"
+            android:textSize="35sp" />
+        
+    
+    </TableRow>
+        
 
-        <LinearLayout
-            android:id="@+id/LinearLayout02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+    <com.scrollable.view.VScroll
+        android:id="@+id/vScroll"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+            
 
-            <Button
-                android:id="@+id/Button01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:text="Submit" >
-            </Button>
+        <com.scrollable.view.HScroll
+            android:id="@+id/hScroll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+                
 
-            <Button
-                android:id="@+id/Button02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:text="Cancel" >
-            </Button>
-        </LinearLayout>
-    </LinearLayout>
+            <TableLayout
+                android:id="@+id/MineField"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="0"
+                android:background="#FFFFFF"
+                android:gravity="bottom"
+                android:padding="0dip"
+                android:stretchColumns="*" >
+                
+            </TableLayout>
+                
+            
+        </com.scrollable.view.HScroll>
+            
+        
+    </com.scrollable.view.VScroll>
 
-</ScrollView> 
+</TableLayout>
