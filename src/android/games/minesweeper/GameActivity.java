@@ -1,6 +1,8 @@
 package android.games.minesweeper;
 
 import java.util.Random;
+
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,15 +21,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameActivity extends BaseActivity {
-	
+
 	private String TAG = this.toString();
-	
-	private float mx, my;
-    private ScrollView vScroll;
-    private HorizontalScrollView hScroll;
-	
+
+	private float currentX, currentY = 0;
+	private float oldX, oldY = 0;
+
+	private boolean started = false;
+
+	private ScrollView vScroll;
+	private HorizontalScrollView hScroll;
+
 	private final static int BoxPadding = 8;
-	private final static int BoxWH = 8;
+	private final static int BoxWH = 15;
 	private TableLayout mineField;
 	private int secondsPassed;
 	private int minutesPassed;
@@ -43,16 +49,22 @@ public class GameActivity extends BaseActivity {
 	public boolean gameLost;
 	public UIBox[][] Boxes;
 
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		vScroll = (ScrollView) findViewById(R.id.vScroll);
-        hScroll = (HorizontalScrollView) findViewById(R.id.hScroll);
+		hScroll = (HorizontalScrollView) findViewById(R.id.hScroll);
 		mineField = (TableLayout) findViewById(R.id.MineField);
 		timerText = (TextView)findViewById(R.id.Timer);
 		scoreText = (TextView)findViewById(R.id.Score);
 
+		//INFO: hide action bar
+		final ActionBar bar = getActionBar();
+		bar.hide();
+		
 		timer = new Handler();
 
 		newGame();
@@ -74,7 +86,7 @@ public class GameActivity extends BaseActivity {
 		// Set total rows and columns based on the difficulty
 		totalRows = options.getSize() * 6 + 10;
 		totalCols = options.getSize() * 6 + 10;
-		
+
 		duration = 0;
 		secondsPassed = 0;
 		minutesPassed = 0;
@@ -93,7 +105,7 @@ public class GameActivity extends BaseActivity {
 			TableRow tableRow = new TableRow(this);
 			//set the height and width of the row
 			tableRow.setLayoutParams(new TableRow.LayoutParams((BoxWH * BoxPadding) * totalCols, BoxWH * BoxPadding));
-			
+
 			//for every column
 			for(int col=0;col<totalCols;col++)       
 			{
@@ -123,12 +135,12 @@ public class GameActivity extends BaseActivity {
 
 				//create a Box
 				Boxes[row][col] = new UIBox(this);
-				
+
 				//set the Box defaults
 				Boxes[row][col].setDefaults();
 				Boxes[row][col].setRow(curRow);
 				Boxes[row][col].setColumn(curCol);
-				
+
 				//set the Box properties
 				int randDifficulty = (int)(new Random().nextInt() % (10 - options.getLevel()));
 				if (randDifficulty == 0)
@@ -245,42 +257,41 @@ public class GameActivity extends BaseActivity {
 			timerText.setText(curMins + ":" + curSecs);
 			if (minutesPassed > 60)
 				timerText.setText("infinity");
-			
+
 			scoreText.setText(new String(Integer.toString(score)));
 
 			timer.postAtTime(this, currentMilliseconds);
 			timer.postDelayed(updateTimer, 1000);
 		}
 	};
-	
+
 	@Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float curX, curY;
+	public boolean onTouchEvent(MotionEvent event) {
 
-        switch (event.getAction()) {
-
-            case MotionEvent.ACTION_DOWN:
-                mx = event.getX();
-                my = event.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                curX = event.getX();
-                curY = event.getY();
-                vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                mx = curX;
-                my = curY;
-                break;
-            case MotionEvent.ACTION_UP:
-                curX = event.getX();
-                curY = event.getY();
-                vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                break;
-        }
-
-        return true;
-    }
+		currentX = event.getX();
+		currentY = event.getY();
+		int dx = (int) (oldX - currentX);
+		int dy = (int) (oldY - currentY);
+		
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_MOVE:
+			if (started) {
+				vScroll.scrollBy(0, dy);
+				hScroll.scrollBy(dx, 0);
+			} else {
+				started = true;
+			}
+			oldX = currentX;
+			oldY = currentY;
+			break;
+		case MotionEvent.ACTION_UP: 
+			vScroll.scrollBy(0, dy);
+			hScroll.scrollBy(dx, 0);
+			started = false;
+			break;
+		}
+		return true;
+	}
 
 	public void loseGame()
 	{
@@ -317,12 +328,12 @@ public class GameActivity extends BaseActivity {
 		}
 		finalizeScore();
 	}
-	
+
 	public void finalizeScore() {
 		scoreText.setText(new String(Integer.toString(score)));
 		this.globals.getScoreDataSource().createScore(score, options.getName(), options.getSize(), options.getLevel(), duration);
 	}
-	
+
 	public void addScore(int val) {
 		if (!gameLost)
 			score += val;
@@ -330,25 +341,25 @@ public class GameActivity extends BaseActivity {
 			score = 0;
 	}
 
-    public boolean onCreateOptionsMenu(Menu menu) {
- 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.game_menu, menu);
+	public boolean onCreateOptionsMenu(Menu menu) {
 
-        return true;
-    }
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.game_menu, menu);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-    	case R.id.new_game:
-    		Toast.makeText(this, "New game!", Toast.LENGTH_SHORT).show();
-    		newGame();
-    		break;
+		return true;
+	}
 
-    	default:
-    		break;
-    	}
-    	return true;
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.new_game:
+			Toast.makeText(this, "New game!", Toast.LENGTH_SHORT).show();
+			newGame();
+			break;
+
+		default:
+			break;
+		}
+		return true;
+	}
 }

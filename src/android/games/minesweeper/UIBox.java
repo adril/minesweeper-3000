@@ -1,11 +1,16 @@
 package android.games.minesweeper;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Button;
 
 public class UIBox extends Button
 {
+	
+	private String TAG = "UIBox";
+	
 	private boolean isMine;
 	private boolean isFlag;
 	private boolean isQuestionMark;
@@ -19,6 +24,7 @@ public class UIBox extends Button
 	{
 		super(context);
 		this.gameActivity = (GameActivity)context;
+		this.setTextColor(Color.RED);
 	}
 
 	public UIBox(Context context, AttributeSet attrs)
@@ -102,7 +108,7 @@ public class UIBox extends Button
 
 		gameActivity.Boxes[row][column].openBox();
 
-		if(gameActivity.Boxes[row][column].getNoSurroundingMines() > 0)
+		if (gameActivity.Boxes[row][column].getNoSurroundingMines() > 0)
 			return;
 
 		//the box on the top
@@ -145,6 +151,11 @@ public class UIBox extends Button
 		gameActivity.addScore(12*(noSurroundingMines+1));
 		uncoverNeighbors();
 		this.setBackgroundResource(R.drawable.emptyauto);
+		
+		String bombToward = "" + noSurroundingMines;
+		Log.d(TAG, bombToward);
+		this.setText(bombToward);
+
 	}
 
 	//show the mine icon
