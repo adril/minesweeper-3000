@@ -29,12 +29,6 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 
 	private ScoreDataSource dataSource;
 	private List<Score> Scores;
-	private Map<String, List<Score>> groupedScores;
-	private ListItemScoreRecords item_details;
-	private ArrayList<ListItemScoreRecords> listItemEasy;
-	private ArrayList<ListItemScoreRecords> listItemMedium;
-	private ArrayList<ListItemScoreRecords> listItemHard;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,94 +37,28 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 		
 		dataSource = ((Globals)getApplication()).getScoreDataSource();
 		Scores = dataSource.getAllScores();
-		groupedScores = dataSource.getGroupedScores();
-		//groupedScores.clear();
 
-		final ListView listViewHard = (ListView)findViewById(R.id.score_list_view_hard);
-		final ListView listViewMedium = (ListView)findViewById(R.id.score_list_view_medium);
-		final ListView listViewEasy = (ListView)findViewById(R.id.score_list_view_easy);
+		final ListView listView = (ListView)findViewById(R.id.score_list_view);
+		text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(Scores));
+		ArrayList<ListItemScoreRecords> listItemArray = new ArrayList<ListItemScoreRecords>();
+        listItemArray.addAll(getScoreRecordsList(Scores));
+        listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Log.d(TAG, "Selected item:" + arg2 + " - " + arg3);
+				switch (arg2) {
+				case 0:
+					// Details of his game
+					break;
+				default:
+					break;
+				}
+			}
+		});
 		
-		Set<Map.Entry<String, List<Score>>> s = groupedScores.entrySet();
-		Iterator<Entry<String, List<Score>>> it = s.iterator();
-        while(it.hasNext())
-        {
-            // key=value separator this by Map.Entry to get key and value
-        	Entry<String, List<Score>> m =(Entry<String, List<Score>>)it.next();
-
-            // getKey is used to get key of Map
-            String key=(String)m.getKey();
-            
-            // getValue is used to get value of key in Map
-            if (key == "unknown") {
-                Log.d(TAG, "GroupedScoresMap(Easy) ");
-                List<Score> value= new ArrayList<Score>(m.getValue());
-                text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(value));
-                ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList(value);
-               
-            }
-            else if (key == "medium") {
-                Log.d(TAG, "GroupedScoresMap(Medium)");
-                List<Score> value= new ArrayList<Score>(m.getValue());
-                text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(value));
-                ArrayList<ListItemScoreRecords> listItemArrayMedium = new ArrayList<ListItemScoreRecords>(getScoreRecordsList(value));
-        		listViewMedium.setAdapter(new ScoreRecordsListAdapter(listItemArrayMedium, getApplicationContext()));
-            }
-            else if (key == "hard"){
-                Log.d(TAG, "GroupedScoresMap(hard)");
-                List<Score> value= new ArrayList<Score>(m.getValue());
-                text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(value));
-                ArrayList<ListItemScoreRecords> listItemArrayHard = new ArrayList<ListItemScoreRecords>(getScoreRecordsList(value));
-        		listViewHard.setAdapter(new ScoreRecordsListAdapter(listItemArrayHard, getApplicationContext()));
-            }
-           // Log.d(TAG, "GroupedScoresMap(Key :"+key+" Value :"+value+")");
-            Log.d(TAG, "---------------------------------------");
-        }
-		
-		listViewHard.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Log.d(TAG, "Selected item:" + arg2 + " - " + arg3);
-				switch (arg2) {
-				case 0:
-					// Details of his game
-					break;
-				default:
-					break;
-				}
-			}
-		});
-		listViewMedium.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Log.d(TAG, "Selected item:" + arg2 + " - " + arg3);
-				switch (arg2) {
-				case 0:
-					// Details of his game
-					break;
-				default:
-					break;
-				}
-			}
-		});
-		listViewEasy.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Log.d(TAG, "Selected item:" + arg2 + " - " + arg3);
-				switch (arg2) {
-				case 0:
-					// Details of his game
-					break;
-				default:
-					break;
-				}
-			}
-		});
 	}
 
 	@Override
@@ -142,12 +70,12 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 	private ArrayList<ListItemScoreRecords> getScoreRecordsList(List<Score> score_list) {
 		ArrayList<ListItemScoreRecords> results = new ArrayList<ListItemScoreRecords>();
 		int score;
-		ScoreRecordsText scoreRecordsText;
 
 		for (int i = 0; i < score_list.size(); i++) {
 			score = score_list.get(i).getScore();
+			ScoreRecordsText scoreRecordsText = new ScoreRecordsText();
 			scoreRecordsText = text.get(i);
-			item_details = new ListItemScoreRecords();
+			ListItemScoreRecords item_details = new ListItemScoreRecords();
 			Log.d(TAG, "GetScoreRecordList text1: " + scoreRecordsText.text1 + " text2:  " + scoreRecordsText.text2);
 			item_details.setText(scoreRecordsText.text1, scoreRecordsText.text2);
 			if (score < 400)
@@ -163,11 +91,23 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 
 	private ArrayList<ScoreRecordsText> getScoreRecordsText(List<Score> score_list) {
 		ArrayList<ScoreRecordsText> results = new ArrayList<ScoreRecordsText>();
+		String level = "NULL";
 		for (int i = 0; i < score_list.size(); i++) {
 			Score score;
 			ScoreRecordsText score_records_text = new ScoreRecordsText();
 			score = score_list.get(i);
-			score_records_text.text1 = "Score: " + score.getScore() + " in " + Globals.gameSizeToString(score.getSize()) + " size";
+			switch(score.getLevel()) {
+			case 0:
+				level = "Easy";
+				break;
+			case 1:
+				level = "Medium";
+				break;
+			case 2:
+				level = "Hard";
+				break;
+			}
+			score_records_text.text1 = "Level : " + level + " -- Score: " + score.getScore() + " in " + Globals.gameSizeToString(score.getSize()) + " size";
 			score_records_text.text2 = score.getName() + " has finished the game";
 			score_records_text.text2 +=  " in " + Scores.get(i).getDuration() + " seconds.";
 			Log.d(TAG, "getScoreRecordsText: text: " + score_records_text.text1 + score_records_text.text2);
