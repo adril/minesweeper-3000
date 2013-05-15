@@ -46,21 +46,21 @@ public class UIBox extends Button
 		this.setBackgroundResource(R.drawable.empty);
 	}
 
-//	public void setRestor()
-//	{
-//		isFlag = false;
-//		isCovered = true;
-//		noSurroundingMines = 0;
-//
-//		this.setBackgroundResource(R.drawable.empty);
-//	}
+	//	public void setRestor()
+	//	{
+	//		isFlag = false;
+	//		isCovered = true;
+	//		noSurroundingMines = 0;
+	//
+	//		this.setBackgroundResource(R.drawable.empty);
+	//	}
 
 	public void toggleFlag() {
 		if (this.isFlag == true)
 			this.setBackgroundResource(R.drawable.empty);
 		else
 			this.setBackgroundResource(R.drawable.flag);
-		
+
 		this.isFlag = !this.isFlag;
 	}
 
@@ -145,7 +145,7 @@ public class UIBox extends Button
 			{
 				if (gameActivity.Boxes[i][j].isCovered()
 						&& gameActivity.Boxes[i][j].isMine() == false
-						&& gameActivity.Boxes[i][j].noSurroundingMines == 0)
+						/*&& gameActivity.Boxes[i][j].noSurroundingMines == 0*/)
 					gameActivity.Boxes[i][j].openBox();
 			}
 		}
@@ -160,9 +160,11 @@ public class UIBox extends Button
 
 		gameActivity.didOpenBox(this);
 
-		String bombToward = "" + noSurroundingMines;
-		Log.d(TAG, bombToward);
-		this.setText(bombToward);
+		if (noSurroundingMines != 0) {
+			String bombToward = "" + noSurroundingMines;
+			Log.d(TAG, bombToward);
+			this.setText(bombToward);
+		}
 
 	}
 
