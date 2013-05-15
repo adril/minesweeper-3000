@@ -2,8 +2,11 @@ package android.games.minesweeper;
 
 import android.games.minesweeper.ScoreDataSource;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -36,21 +39,78 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 		dataSource = ((Globals)getApplication()).getScoreDataSource();
 		Scores = dataSource.getAllScores();
 		groupedScores = dataSource.getGroupedScores();
-		groupedScores.clear();
+		//groupedScores.clear();
 				
-		text = getScoreRecordsText();
-
-		for (int i = 0; i < Scores.size(); i++) {
+		for (int i = 0; i < text.size(); i++) {
 			Log.d(TAG, text.get(i).text1);
 		}
 
-		final ListView listView = (ListView)findViewById(R.id.score_list_view);
-		ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList();
+		final ListView listViewHard = (ListView)findViewById(R.id.score_list_view);
+		final ListView listViewMedium = (ListView)findViewById(R.id.score_list_view2);
+		final ListView listViewEasy = (ListView)findViewById(R.id.score_list_view3);
+		
+		Set<Map.Entry<String, List<Score>>> s = groupedScores.entrySet();
+		Iterator<Entry<String, List<Score>>> it = s.iterator();
+        while(it.hasNext())
+        {
+            // key=value separator this by Map.Entry to get key and value
+        	Entry<String, List<Score>> m =(Entry<String, List<Score>>)it.next();
+
+            // getKey is used to get key of Map
+            String key=(String)m.getKey();
+            
+            // getValue is used to get value of key in Map
+            List<Score> value=(List<Score>)m.getValue();
+            text = getScoreRecordsText(value);
+            ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList(value);
+            //Log.d(TAG, "Level = " + value.get(0).getLevel()); 
+            if (key == "unknown") {
+                Log.d(TAG, "GroupedScoresMap(Easy)");
+        		listViewEasy.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+            }
+            else if (key == "medium") {
+                Log.d(TAG, "GroupedScoresMap(Medium)");
+        		listViewMedium.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+            }
+            else if (key == "hard")
+        		listViewHard.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+            Log.d(TAG, "GroupedScoresMap(Key :"+key+" Value :"+value+")");
+        }
+		//ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList(score_list);
 		//if (listItemArray.isEmpty() == false)
 		
-		listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+		//listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+		listViewHard.setOnItemClickListener(new OnItemClickListener() {
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Log.d(TAG, "Selected item:" + arg2 + " - " + arg3);
+				switch (arg2) {
+				case 0:
+					// Details of his game
+					break;
+				default:
+					break;
+				}
+			}
+		});
+		listViewMedium.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Log.d(TAG, "Selected item:" + arg2 + " - " + arg3);
+				switch (arg2) {
+				case 0:
+					// Details of his game
+					break;
+				default:
+					break;
+				}
+			}
+		});
+		listViewEasy.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -73,38 +133,37 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 
 	}
 
-	private ArrayList<ListItemScoreRecords> getScoreRecordsList() {
+	private ArrayList<ListItemScoreRecords> getScoreRecordsList(List<Score> score_list) {
 		ArrayList<ListItemScoreRecords> results = new ArrayList<ListItemScoreRecords>();
 		int score;
 		ScoreRecordsText scoreRecordsText;
 
-		for (int i = 0; i < Scores.size(); i++) {
-			score = Scores.get(i).getScore();
+		for (int i = 0; i < score_list.size(); i++) {
+			score = score_list.get(i).getScore();
 			scoreRecordsText = text.get(i);
 			item_details = new ListItemScoreRecords();
 			Log.d(TAG, "GetScoreRecordList text1: " + scoreRecordsText.text1 + " text2:  " + scoreRecordsText.text2);
 			item_details.setText(scoreRecordsText.text1, scoreRecordsText.text2);
 			if (score < 400)
-				item_details.setImage(image[0]);
+				item_details.setImage(image[2]);
 			else if (score >= 400 && score <= 2000)
 				item_details.setImage(image[1]);
 			else if (score > 3000)
-				item_details.setImage(image[2]);
+				item_details.setImage(image[0]);
 			results.add(item_details);
 		}
 		return results;
 	}
 
-	private ArrayList<ScoreRecordsText> getScoreRecordsText() {
+	private ArrayList<ScoreRecordsText> getScoreRecordsText(List<Score> score_list) {
 		ArrayList<ScoreRecordsText> results = new ArrayList<ScoreRecordsText>();
-		ScoreRecordsText score_records_text = new ScoreRecordsText();
-		Score score;
-		
-		for (int i = 0; i < Scores.size(); i++) {
-			score = Scores.get(i);
-			score_records_text.text1 = "Score: " + score.getScore() + " with size " + Globals.gameSizeToString(score.getSize());
-			score_records_text.text2 = score.getName() + " has finished the game with difficulty ";
-			score_records_text.text2 += Globals.levelToString(score.getLevel()) + " in " + Scores.get(i).getDuration() + " seconds.";
+		for (int i = 0; i < score_list.size(); i++) {
+			Score score;
+			ScoreRecordsText score_records_text = new ScoreRecordsText();
+			score = score_list.get(i);
+			score_records_text.text1 = "Score: " + score.getScore() + " in " + Globals.gameSizeToString(score.getSize()) + " size";
+			score_records_text.text2 = score.getName() + " has finished the game";
+			score_records_text.text2 +=  " in " + Scores.get(i).getDuration() + " seconds.";
 			Log.d(TAG, "getScoreRecordsText: text: " + score_records_text.text1 + score_records_text.text2);
 			results.add(score_records_text);
 		}

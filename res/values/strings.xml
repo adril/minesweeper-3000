@@ -19,5 +19,10 @@
     <string name="small_label">Small</string>
     <string name="big_label">Big</string>
     <string name="b_remove">Remove</string>
+    
+    <string name="scores_easy">Easy</string>
+    <string name="scores_medium">Medium</string>
+    <string name="scores_hard">Hard</string>
+        
 
 </resources>
