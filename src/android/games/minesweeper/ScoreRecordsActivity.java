@@ -2,6 +2,7 @@ package android.games.minesweeper;
 
 import android.games.minesweeper.ScoreDataSource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 
 	private String TAG = "ScoreActivity";
 
-	private ArrayList<ScoreRecordsText> text = new ArrayList<ScoreRecordsText>();
+	private ArrayList<ScoreRecordsText> text;
 
 	private int[] image = { R.drawable.icon_good, R.drawable.icon_normal, R.drawable.icon_bad };
 
@@ -30,6 +31,10 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 	private List<Score> Scores;
 	private Map<String, List<Score>> groupedScores;
 	private ListItemScoreRecords item_details;
+	private ArrayList<ListItemScoreRecords> listItemEasy;
+	private ArrayList<ListItemScoreRecords> listItemMedium;
+	private ArrayList<ListItemScoreRecords> listItemHard;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +45,10 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
 		Scores = dataSource.getAllScores();
 		groupedScores = dataSource.getGroupedScores();
 		//groupedScores.clear();
-				
-		for (int i = 0; i < text.size(); i++) {
-			Log.d(TAG, text.get(i).text1);
-		}
 
-		final ListView listViewHard = (ListView)findViewById(R.id.score_list_view);
-		final ListView listViewMedium = (ListView)findViewById(R.id.score_list_view2);
-		final ListView listViewEasy = (ListView)findViewById(R.id.score_list_view3);
+		final ListView listViewHard = (ListView)findViewById(R.id.score_list_view_hard);
+		final ListView listViewMedium = (ListView)findViewById(R.id.score_list_view_medium);
+		final ListView listViewEasy = (ListView)findViewById(R.id.score_list_view_easy);
 		
 		Set<Map.Entry<String, List<Score>>> s = groupedScores.entrySet();
 		Iterator<Entry<String, List<Score>>> it = s.iterator();
@@ -60,26 +61,31 @@ public class ScoreRecordsActivity extends BaseActivity implements OnClickListene
             String key=(String)m.getKey();
             
             // getValue is used to get value of key in Map
-            List<Score> value=(List<Score>)m.getValue();
-            text = getScoreRecordsText(value);
-            ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList(value);
-            //Log.d(TAG, "Level = " + value.get(0).getLevel()); 
             if (key == "unknown") {
-                Log.d(TAG, "GroupedScoresMap(Easy)");
-        		listViewEasy.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+                Log.d(TAG, "GroupedScoresMap(Easy) ");
+                List<Score> value= new ArrayList<Score>(m.getValue());
+                text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(value));
+                ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList(value);
+               
             }
             else if (key == "medium") {
                 Log.d(TAG, "GroupedScoresMap(Medium)");
-        		listViewMedium.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
+                List<Score> value= new ArrayList<Score>(m.getValue());
+                text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(value));
+                ArrayList<ListItemScoreRecords> listItemArrayMedium = new ArrayList<ListItemScoreRecords>(getScoreRecordsList(value));
+        		listViewMedium.setAdapter(new ScoreRecordsListAdapter(listItemArrayMedium, getApplicationContext()));
             }
-            else if (key == "hard")
-        		listViewHard.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
-            Log.d(TAG, "GroupedScoresMap(Key :"+key+" Value :"+value+")");
+            else if (key == "hard"){
+                Log.d(TAG, "GroupedScoresMap(hard)");
+                List<Score> value= new ArrayList<Score>(m.getValue());
+                text = new ArrayList<ScoreRecordsText>(getScoreRecordsText(value));
+                ArrayList<ListItemScoreRecords> listItemArrayHard = new ArrayList<ListItemScoreRecords>(getScoreRecordsList(value));
+        		listViewHard.setAdapter(new ScoreRecordsListAdapter(listItemArrayHard, getApplicationContext()));
+            }
+           // Log.d(TAG, "GroupedScoresMap(Key :"+key+" Value :"+value+")");
+            Log.d(TAG, "---------------------------------------");
         }
-		//ArrayList<ListItemScoreRecords> listItemArray = getScoreRecordsList(score_list);
-		//if (listItemArray.isEmpty() == false)
 		
-		//listView.setAdapter(new ScoreRecordsListAdapter(listItemArray, getApplicationContext()));
 		listViewHard.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
