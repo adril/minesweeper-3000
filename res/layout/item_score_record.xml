@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" 
-    android:background="@drawable/item_main_menu_selector" >
+    android:background="@drawable/item_main_menu_selector"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/ll"
@@ -28,32 +28,29 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="0dip"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="11% Completed with size 1"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/item_main_label"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
-             <TextView
-                 android:id="@+id/textView2"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="10dp"
-                 android:layout_marginRight="0dp"
-                 android:gravity="left"
-                 android:text="Astero finished the game with difficulty 1 in 30 seconds."
-                 android:textAppearance="?android:attr/textAppearanceLarge"
-                 android:textColor="@color/item_main_label"
-                 android:textSize="14sp"
-                 android:textStyle="normal" />
-
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="Astero finished the game with difficulty 1 in 30 seconds."
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/item_main_label"
+                android:textSize="14sp"
+                android:textStyle="normal" />
         </LinearLayout>
-
-       
-
     </LinearLayout>
 
 </LinearLayout>
