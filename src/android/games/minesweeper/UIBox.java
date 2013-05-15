@@ -23,7 +23,7 @@ public class UIBox extends Button
 	{
 		super(context);
 		this.gameActivity = (GameActivity)context;
-		this.setTextColor(Color.RED);
+		this.setTextColor(Color.BLACK);
 	}
 
 	public UIBox(Context context, AttributeSet attrs)
@@ -160,7 +160,7 @@ public class UIBox extends Button
 
 		gameActivity.didOpenBox(this);
 
-		if (noSurroundingMines != 0) {
+		if (noSurroundingMines != 0 && !this.isMine()) {
 			String bombToward = "" + noSurroundingMines;
 			Log.d(TAG, bombToward);
 			this.setText(bombToward);

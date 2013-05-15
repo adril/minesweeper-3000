@@ -451,6 +451,7 @@ public class GameActivity extends BaseActivity {
 		gameLost = true;
 		Log.d(TAG, "Lost the game.");
 		stopTimer();
+		//INFO: display all boxes 
 		/*
 			for (int i = 0; i < totalRows; i++)
 			{
@@ -540,7 +541,8 @@ public class GameActivity extends BaseActivity {
 		Log.d(TAG, "totalOpenBoxNumber: " + totalOpenBoxNumber + " totalBombNumber: " + totalBoxNumber);
 
 		if (getScore() == 100) {
-			//INFO: win
+			//INFO: 
+			finalizeScore();
 			showDialog("Win", getScore() + "% of mine discovered.\nYou WIN in " + minutesPassed +  " minutes " + secondsPassed + " seconds\n" + "Do you want to continue ?");
 		}
 	}
