@@ -8,6 +8,9 @@
     <color name="item_main_menu_background">#FFFFFF</color>
     <color name="item_main_menu_selected_background">#A32331</color>
     
+    <color name="game_header_background">#A32331</color>
+    
+    
     <color name="button_normal">#A32331</color>
     <color name="button_pressed">#A32331</color>
     

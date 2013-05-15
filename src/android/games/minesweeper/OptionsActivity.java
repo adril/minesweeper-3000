@@ -4,10 +4,12 @@ package android.games.minesweeper;
 import java.util.List;
 
 import android.os.Bundle;
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +18,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class OptionsActivity extends BaseActivity {
 
@@ -36,11 +40,12 @@ public class OptionsActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_options);
 
-		//TODO: set Option with model
+		//TODO: set Option with model [OK]
 		// Options options = Global.getOption(); 
 		//setControl with options
 		//edition -> modification de Options
 		//Quit view -> save option
+					
 
 		setupView();
 		setupListner();		
@@ -132,10 +137,9 @@ public class OptionsActivity extends BaseActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				String player_name = txt_player_name.getText().toString();
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(txt_player_name.getWindowToken(), 0);
+				
 
-				//INFO: setting name
+			//INFO: setting name
 				optionRecord.setName(player_name);
 
 				Log.d(TAG, "Edit Text PLAYER NAME : " + player_name);
@@ -156,8 +160,9 @@ public class OptionsActivity extends BaseActivity {
 				Log.d("Button Remove : ", "ok");
 			}
 		});
+		
 	}
-
+	
 	private int buttonIdForLevel(final int level) {
 		int buttonId = 0;
 

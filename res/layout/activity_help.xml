@@ -2,6 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:text="To discover a box touch it faster. If you find a mine, you loose.\n\nTo add a flag, touch a box at least 2 seconds.\n\nThe goal of the game is to flag all the bomb as fast as you can.\n\nGood games ;)"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/item_main_label" />
 
 </LinearLayout>

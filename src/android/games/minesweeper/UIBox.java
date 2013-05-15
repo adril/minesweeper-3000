@@ -8,12 +8,11 @@ import android.widget.Button;
 
 public class UIBox extends Button
 {
-	
+
 	private String TAG = "UIBox";
-	
+
 	private boolean isMine;
 	private boolean isFlag;
-	private boolean isQuestionMark;
 	private boolean isCovered;
 	private int noSurroundingMines;
 	private GameActivity gameActivity;
@@ -41,26 +40,38 @@ public class UIBox extends Button
 	{
 		isMine = false;
 		isFlag = false;
-		isQuestionMark = false;
 		isCovered = true;
 		noSurroundingMines = 0;
 
 		this.setBackgroundResource(R.drawable.empty);
 	}
-	
+
+//	public void setRestor()
+//	{
+//		isFlag = false;
+//		isCovered = true;
+//		noSurroundingMines = 0;
+//
+//		this.setBackgroundResource(R.drawable.empty);
+//	}
+
 	public void toggleFlag() {
-		this.setBackgroundResource(R.drawable.flag);
+		if (this.isFlag == true)
+			this.setBackgroundResource(R.drawable.empty);
+		else
+			this.setBackgroundResource(R.drawable.flag);
+		
 		this.isFlag = !this.isFlag;
 	}
-	
+
 	public void setRow(int row) {
 		this.row = row;
 	}
-	
+
 	public void setColumn(int column) {
 		this.column = column;
 	}
-	
+
 	public void setMine(boolean mine)
 	{
 		isMine = mine;
@@ -69,11 +80,6 @@ public class UIBox extends Button
 	public void setFlag(boolean flag)
 	{
 		isFlag = flag;
-	}
-
-	public void setQuestionMark(boolean flag)
-	{
-		isQuestionMark = flag;
 	}
 
 	public void setUncovered()
@@ -90,20 +96,20 @@ public class UIBox extends Button
 	//uncover the Box
 	public void openBox()
 	{
-		if(!isCovered)
+		if (!isCovered)
 			return;
 
 		setUncovered();
-		if(this.isMine())
+		if (this.isMine())
 			triggerMine();
 		else
 			showNumber();
-		gameActivity.addScore(10*noSurroundingMines);
+		//gameActivity.addScore(10 * noSurroundingMines);
 	}
 
 	private void uncoverNeighbors() {
 		//if the Box is a mine, or a flag return
-		if(gameActivity.Boxes[row][column].isMine() || gameActivity.Boxes[row][column].isFlag())
+		if (gameActivity.Boxes[row][column].isMine() || gameActivity.Boxes[row][column].isFlag())
 			return;
 
 		gameActivity.Boxes[row][column].openBox();
@@ -112,8 +118,8 @@ public class UIBox extends Button
 			return;
 
 		//the box on the top
-		int startRow = row-1;
-		int startCol = column-1;
+		int startRow = row - 1;
+		int startCol = column - 1;
 
 		int checkRows = 3;
 		int checkCols = 3;
@@ -122,7 +128,7 @@ public class UIBox extends Button
 			startRow = 0;
 			checkRows = 2;
 		}
-		else if (startRow+3 > gameActivity.totalRows) //if it is on the last row
+		else if (startRow + 3 > gameActivity.totalRows) //if it is on the last row
 			checkRows = 2;
 
 		if (startCol < 0)
@@ -130,16 +136,16 @@ public class UIBox extends Button
 			startCol = 0;
 			checkCols = 2;
 		}
-		else if (startCol+3 > gameActivity.totalCols) //if it is on the last row
+		else if (startCol + 3 > gameActivity.totalCols) //if it is on the last row
 			checkCols = 2;
 
-		for (int i=startRow;i<startRow+checkRows;i++) //3 or 2 rows across
+		for (int i = startRow; i < startRow + checkRows; i++) //3 or 2 rows across
 		{
-			for (int j=startCol;j<startCol+checkCols;j++) //3 or 2 rows down
+			for (int j = startCol; j < startCol + checkCols; j++) //3 or 2 rows down
 			{
 				if (gameActivity.Boxes[i][j].isCovered()
-					&& gameActivity.Boxes[i][j].isMine() == false
-					&& gameActivity.Boxes[i][j].noSurroundingMines == 0)
+						&& gameActivity.Boxes[i][j].isMine() == false
+						&& gameActivity.Boxes[i][j].noSurroundingMines == 0)
 					gameActivity.Boxes[i][j].openBox();
 			}
 		}
@@ -148,10 +154,12 @@ public class UIBox extends Button
 	//show the number icon
 	public void showNumber()
 	{
-		gameActivity.addScore(12*(noSurroundingMines+1));
+		//gameActivity.addScore(12*(noSurroundingMines+1));
 		uncoverNeighbors();
 		this.setBackgroundResource(R.drawable.emptyauto);
-		
+
+		gameActivity.didOpenBox(this);
+
 		String bombToward = "" + noSurroundingMines;
 		Log.d(TAG, bombToward);
 		this.setText(bombToward);
@@ -171,11 +179,11 @@ public class UIBox extends Button
 	{
 		isMine = true;
 	}
-	
+
 	public int getRow() {
 		return this.row;
 	}
-	
+
 	public int getColumn() {
 		return this.column;
 	}
@@ -193,11 +201,6 @@ public class UIBox extends Button
 	public boolean isCovered()
 	{
 		return isCovered;
-	}
-
-	public boolean isQuestionMark()
-	{
-		return isQuestionMark;
 	}
 
 	public int getNoSurroundingMines()
