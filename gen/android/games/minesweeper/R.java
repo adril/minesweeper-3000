@@ -56,10 +56,13 @@ public final class R {
         public static final int stop_icon=0x7f02000f;
     }
     public static final class id {
+        public static final int EasyTitle=0x7f0a0025;
+        public static final int HardTitle=0x7f0a0021;
         public static final int HighScoresTitle=0x7f0a0020;
+        public static final int MediumTitle=0x7f0a0023;
         public static final int MineField=0x7f0a000f;
         public static final int Timer=0x7f0a0002;
-        public static final int action_settings=0x7f0a0026;
+        public static final int action_settings=0x7f0a002b;
         public static final int b_remove=0x7f0a001f;
         public static final int boxImageView=0x7f0a0006;
         public static final int boxProgressBar=0x7f0a0007;
@@ -67,23 +70,25 @@ public final class R {
         public static final int flagImageView=0x7f0a000a;
         public static final int flagProgressBar=0x7f0a000b;
         public static final int hScroll=0x7f0a000e;
-        public static final int imageView1=0x7f0a0023;
+        public static final int imageView1=0x7f0a0028;
         public static final int layout1=0x7f0a0001;
         public static final int layout3=0x7f0a0000;
         public static final int layout4=0x7f0a0004;
         public static final int layout5=0x7f0a0005;
         public static final int layout6=0x7f0a0008;
         public static final int layout7=0x7f0a0009;
-        public static final int ll=0x7f0a0022;
+        public static final int ll=0x7f0a0027;
         public static final int lvl_easy=0x7f0a0014;
         public static final int lvl_hard=0x7f0a0016;
         public static final int lvl_medium=0x7f0a0015;
         public static final int main_list_view=0x7f0a0011;
-        public static final int new_game=0x7f0a0025;
+        public static final int new_game=0x7f0a002a;
         public static final int playPauseButton=0x7f0a0003;
         public static final int rg_lvl=0x7f0a0013;
         public static final int rg_size=0x7f0a0018;
-        public static final int score_list_view=0x7f0a0021;
+        public static final int score_list_view_easy=0x7f0a0026;
+        public static final int score_list_view_hard=0x7f0a0022;
+        public static final int score_list_view_medium=0x7f0a0024;
         public static final int size_big=0x7f0a001b;
         public static final int size_medium=0x7f0a001a;
         public static final int size_small=0x7f0a0019;
@@ -93,7 +98,7 @@ public final class R {
         public static final int t_remove=0x7f0a001e;
         public static final int t_size=0x7f0a0017;
         public static final int textView1=0x7f0a0010;
-        public static final int textView2=0x7f0a0024;
+        public static final int textView2=0x7f0a0029;
         public static final int vScroll=0x7f0a000d;
     }
     public static final class layout {
@@ -123,6 +128,9 @@ public final class R {
         public static final int options=0x7f070003;
         public static final int play=0x7f070001;
         public static final int remove_label=0x7f07000e;
+        public static final int scores_easy=0x7f070012;
+        public static final int scores_hard=0x7f070014;
+        public static final int scores_medium=0x7f070013;
         public static final int scores_records=0x7f070002;
         public static final int size_label=0x7f07000c;
         public static final int small_label=0x7f07000f;
