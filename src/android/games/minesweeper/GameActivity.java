@@ -64,6 +64,8 @@ public class GameActivity extends BaseActivity {
 	private Handler timer;
 	private TextView timerText;
 
+	//
+	private boolean isDisplayingWinMessage;
 
 	//INFO: main
 	public UIBox[][] Boxes;
@@ -157,11 +159,13 @@ public class GameActivity extends BaseActivity {
 
 				if (title == "Loose") {
 					Log.d(TAG, "New game selected");
+					isDisplayingWinMessage = false;
 					endGame();
 					start();
 				}
 				else {
 					Log.d(TAG, "Restart selected");
+					isDisplayingWinMessage = false;
 					restart();
 				}
 			}
@@ -242,6 +246,8 @@ public class GameActivity extends BaseActivity {
 
 		boxProgressBar.setProgress(0);
 		flagProgressBar.setProgress(0);
+		
+		isDisplayingWinMessage = false;
 	}
 
 	public void showGameBoard()
@@ -411,6 +417,16 @@ public class GameActivity extends BaseActivity {
 				curMins = "0" + curMins;
 			timerText.setText(curMins + ":" + curSecs);
 
+			updateProgressBar();
+
+			if (getScore() == 100 && isDisplayingWinMessage == false) {
+				//INFO: 
+				finalizeScore();
+				showDialog("Win", getScore() + "% of mine discovered.\nYou WIN in " + minutesPassed +  " minutes " + secondsPassed + " seconds\n" + "Do you want to continue ?");
+				isDisplayingWinMessage = true;
+			}
+
+
 			timer.postAtTime(this, currentMilliseconds);
 			timer.postDelayed(updateTimer, 1000);
 		}
@@ -531,7 +547,11 @@ public class GameActivity extends BaseActivity {
 
 	public void didOpenBox(UIBox sender) {
 		totalOpenBoxNumber++;
+		updateProgressBar();
 
+	}
+
+	private void updateProgressBar() {
 		int bombDiscoveredAverage = (totalDiscoveredFlagNumber * 100) / totalBombNumber;//Could be wrong number if the box selected is not a bomb
 		flagProgressBar.setProgress(bombDiscoveredAverage);
 		int boxDiscoveredAverage =  (totalOpenBoxNumber * 100) / totalBoxNumber;
@@ -540,11 +560,6 @@ public class GameActivity extends BaseActivity {
 		Log.d(TAG, "totalDiscoveredFlagNumber: " + totalDiscoveredFlagNumber + " totalBombNumber: " + totalBombNumber);
 		Log.d(TAG, "totalOpenBoxNumber: " + totalOpenBoxNumber + " totalBombNumber: " + totalBoxNumber);
 
-		if (getScore() == 100) {
-			//INFO: 
-			finalizeScore();
-			showDialog("Win", getScore() + "% of mine discovered.\nYou WIN in " + minutesPassed +  " minutes " + secondsPassed + " seconds\n" + "Do you want to continue ?");
-		}
 	}
 
 	private int getScore() {
