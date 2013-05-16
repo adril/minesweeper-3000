@@ -5,14 +5,66 @@
     android:background="#ffffff"
     android:orientation="vertical" >
 
+	<TextView
+	    android:id="@+id/textView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginTop="10dp"
+	    android:text="Strategy : "
+	    android:textColor="@color/item_main_label"
+	    android:textSize="20sp"
+	    android:textStyle="bold" />
+
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginLeft="10dp"
+	    android:layout_marginTop="5dp"
+        android:text="To discover a box touch it faster. If you find a mine, you loose. To add a flag, touch a box at least 2 seconds."
+        android:textColor="@color/item_main_label"
+        android:textSize="15sp"/>
+
+ 	<TextView
+ 	    android:id="@+id/textView3"
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+	    android:layout_marginTop="10dp" 	    
+	    android:text="Goal :"
+ 	    android:textColor="@color/item_main_label"
+ 	    android:textSize="20sp"
+ 	    android:textStyle="bold" />
+
+ 	<TextView
+ 	    android:id="@+id/textView4"
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="40dp"
+ 	    android:layout_marginLeft="10dp"
+ 	    android:layout_marginTop="5dp"
+ 	    android:text="The goal of the game is to flag all the bomb as fast as you can."
+ 	    android:textColor="@color/item_main_label"
+ 	    android:textSize="15sp" />
+
+ 	<TextView
+ 	    android:id="@+id/textView4"
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="40dp"
+ 	    android:layout_marginLeft="10dp"
+ 	    android:layout_marginTop="10dp"
+ 	    android:text="Patterns :"
+ 	    android:textColor="@color/item_main_label"
+ 	    android:textSize="20sp"
+ 	    android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
         android:layout_margin="10dp"
-        android:text="To discover a box touch it faster. If you find a mine, you loose.\n\nTo add a flag, touch a box at least 2 seconds.\n\nThe goal of the game is to flag all the bomb as fast as you can.\n\nGood games ;)"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/item_main_label" />
+        android:layout_marginBottom="0dp"
+        android:padding="10dip"
+        android:src="@drawable/help_img" />
 
 </LinearLayout>
